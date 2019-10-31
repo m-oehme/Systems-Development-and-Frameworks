@@ -11,30 +11,30 @@ Vue.component('todo-list', {
 				<li>
 					<div v-if="!isEditing">
 						{{ todo.message }}
-						<button @click="editing">Edit</button>
-						<button @click="deleting">Delete</button>
+						<button @click="edit">Edit</button>
+						<button @click="delToDo">Delete</button>
 					</div>
 					<div v-else>
 						<input v-model="temp"/>
-						<button @click="saving">Save</button>
-						<button @click="canceling">Cancel</button>
+						<button @click="save">Save</button>
+						<button @click="cancel">Cancel</button>
 					</div>
 				</li>
 	`,
 	methods: {
-		editing: function() {
+		edit: function() {
 			this.temp = this.todo.message;
 			this.isEditing = true;
 		},
-		deleting: function() {
+		delToDo: function() {
 			this.isEditing = false;
 			vue.delete(this.index);
 		},
-		saving: function() {
+		save: function() {
 			this.isEditing = false;
 			vue.save(this.temp, this.index);
 		},
-		canceling: function() {
+		cancel: function() {
 			this.isEditing = false;
 		}
 	}
