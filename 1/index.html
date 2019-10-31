@@ -16,9 +16,9 @@
 			<ol>
 				<todo-list
 					v-for="(todo, index) in todos"
-					v-bind:todo="todo"
-					v-bind:index="index"
-					v-bind:key="todo.id"					
+					:todo="todo"
+					:index="index"
+					:key="todo.id"					
 				></todo-list>
 			</ol>
 		</div>

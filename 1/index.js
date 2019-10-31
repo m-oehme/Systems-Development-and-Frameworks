@@ -1,8 +1,4 @@
 
-<<<<<<< HEAD:VueJS/index.js
-// import List from './components/List.js'
-// import ListItem from './components/ListItem.js'
-
 Vue.component('todo-list', {
 	props: ['todo', 'index'],
 	data: function() {
@@ -42,6 +38,7 @@ Vue.component('todo-list', {
 			this.setEdit = false;
 		}
 	}
+})
 
 var vue = new Vue({
 	el: '#app',
