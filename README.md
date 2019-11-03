@@ -14,9 +14,9 @@ Before starting make sure you have a `package.json` file in your Project root. I
 
 ### Linter: Prettier
 
-[https://prettier.io]
+Documentation: [https://prettier.io](https://prettier.io)
 
-**(Required)** Installing
+**Required** Installing
 
 ```npm
 npm install prettier --save-dev --save-exact
@@ -44,9 +44,9 @@ After successfully running the command add the following to your `package.json`
 
 ### Jest
 
-[https://jestjs.io/docs/en/getting-started]
+Documentation: [https://jestjs.io/docs/en/getting-started](https://jestjs.io/docs/en/getting-started)
 
-**(Required)** Installing:
+**Required** Installing:
 
 ```npm
 npm install --save-dev jest
@@ -56,9 +56,9 @@ Check out the Jest documentation for examples!
 
 ### Vue-Test-Utils
 
-[https://github.com/vuejs/vue-test-utils]
+Documentation: [https://github.com/vuejs/vue-test-utils](https://github.com/vuejs/vue-test-utils)
 
-**(Required)** Installing:
+**Required)** Installing:
 
 ```npm
 npm install --save-dev @vue/test-utils
