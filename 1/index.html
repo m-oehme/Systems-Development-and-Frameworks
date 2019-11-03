@@ -1,27 +1,27 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8" />
-		<title>SDF Exercise #1</title>
-		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>	
-	</head>
-	<body>
-		<h1>SDF Exercise #1</h1>
-		<p>To-Do Liste</p>
-		<div id="app">
-			<div>
-				{{ message }}
-				<button @click="add">Add</button>
-			</div>
-			<ol>
-				<todo-list
-					v-for="(todo, index) in todos"
-					:todo="todo"
-					:index="index"
-					:key="todo.id"					
-				></todo-list>
-			</ol>
-		</div>
-		<script src="index.js"></script>
-	</body>
+  <head>
+    <meta charset="utf-8" />
+    <title>SDF Exercise #1</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  </head>
+  <body>
+    <h1>SDF Exercise #1</h1>
+    <p>To-Do Liste</p>
+    <div id="app">
+      <div>
+        {{ message }}
+        <button @click="add">Add</button>
+      </div>
+      <ol>
+        <todo-list
+          v-for="(todo, index) in todos"
+          :todo="todo"
+          :index="index"
+          :key="todo.id"
+        ></todo-list>
+      </ol>
+    </div>
+    <script src="index.js"></script>
+  </body>
 </html>
