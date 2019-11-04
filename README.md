@@ -1,4 +1,8 @@
-# Systems Development and Frameworks - Group Assignments - Winter Term 2019/20
+# Systems Development and Frameworks
+
+[![Build Status](https://travis-ci.com/m-oehme/Systems-Development-and-Frameworks.svg?branch=master)](https://travis-ci.com/m-oehme/Systems-Development-and-Frameworks)
+
+## Group Assignments - Winter Term 2019/20
 
 | Github Alias                                     | Name   |
 | ------------------------------------------------ | ------ |
