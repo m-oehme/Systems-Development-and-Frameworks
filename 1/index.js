@@ -44,31 +44,26 @@ var vue = new Vue({
   data: {
     message: "Hello Vue!",
     todos: [
-      { id: "1", message: "Foo" },
-      { id: "2", message: "Bar" },
-      { id: "3", message: "Baz" }
-    ]
-    //nextID: '',
+      { id: 1, message: "Foo" },
+      { id: 2, message: "Bar" },
+      { id: 3, message: "Baz" }
+    ],
+    lastID: 3
   },
   methods: {
     add: function() {
+      this.lastID++;
+      // this.todos.length++;
       this.todos.push({
-        id: this.todos.length + 1,
+        id: this.lastID,
         message: "New ToDo"
       });
-      this.todos.length + 1;
     },
     delete: function(index) {
       this.todos.splice(index, 1);
     },
     save: function(msg, index) {
       this.todos[index].message = msg;
-    }
-  },
-  computed: {
-    nextID() {
-      let max = Math.max(...this.todos.map(t => t.id), 0);
-      return max + 1;
     }
   }
 });
