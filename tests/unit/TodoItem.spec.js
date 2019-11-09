@@ -1,9 +1,18 @@
-import Vue from 'vue'
-import TodoItem from "../../src/components/TodoItem";
+import { shallowMount } from '@vue/test-utils'
+import TodoItem from "@/components/TodoItem";
 
-describe("TodoList", () => {
-    if('has a created hook', () => {
-        expect(typeof TodoItem.name).toBe("function")
-    });
-
+const wrapper = shallowMount(TodoItem, {
+    propsData: {
+        todo: {
+            id: 1,
+            message: "todo.text"
+        }
+    }
 });
+
+// describe("TodoList", () => {
+//     if('has a created hook', () => {
+//         expect(typeof TodoItem.name).toBe("function")
+//     });
+//
+// });
