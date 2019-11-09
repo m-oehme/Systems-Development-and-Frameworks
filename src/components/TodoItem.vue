@@ -2,12 +2,12 @@
     <li>
         <div v-if="!isEditing">
             {{ todo.message }}
-            <button @click="edit">Edit</button>
-            <button @click="delToDo">Delete</button>
+            <button id="edit" @click="edit">Edit</button>
+            <button id="delete" @click="delToDo">Delete</button>
         </div>
         <div v-else>
             <input v-model="temp" />
-            <button @click="save">Save</button>
+            <button id="save" @click="save">Save</button>
             <button @click="cancel">Cancel</button>
         </div>
     </li>
@@ -30,11 +30,14 @@
             },
             delToDo: function() {
                 this.isEditing = false;
-                this.$parent.deleteEntry(this.index);
+                this.$emit("deleteEntry", this.index);
+                // this.$parent.deleteEntry(this.index);
             },
             save: function() {
                 this.isEditing = false;
-                this.$parent.saveEntry(this.temp, this.index);
+                this.todo.message = this.temp;
+                this.$emit("saveEntry", this.temp, this.index);
+                // this.$parent.saveEntry(this.temp, this.index);
             },
             cancel: function() {
                 this.isEditing = false;
