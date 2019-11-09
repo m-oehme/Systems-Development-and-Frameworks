@@ -19,7 +19,7 @@
         props: ["todo", "index"],
         data() {
             return {
-                isEditing: false,
+                isEditing: this.todo.isEditing,
                 temp: ""
             };
         },

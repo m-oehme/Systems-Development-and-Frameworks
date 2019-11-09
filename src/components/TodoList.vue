@@ -21,9 +21,9 @@
     data() {
       return {
         todoListData: [
-          {id: 1, message: "Foo"},
-          {id: 2, message: "Bar"},
-          {id: 3, message: "Baz"}
+          {id: 1, message: "Foo", isEditing: false},
+          {id: 2, message: "Bar", isEditing: false},
+          {id: 3, message: "Baz", isEditing: false}
         ],
         lastID: 3
       }
@@ -33,7 +33,8 @@
         this.lastID++;
         this.todoListData.push({
           id: this.lastID,
-          message: "New ToDo"
+          message: "New ToDo",
+          isEditing: true
         });
       },
       deleteEntry: function (index) {
