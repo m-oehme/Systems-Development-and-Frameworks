@@ -10,9 +10,9 @@ const wrapper = shallowMount(TodoItem, {
     }
 });
 
-// describe("TodoList", () => {
-//     if('has a created hook', () => {
-//         expect(typeof TodoItem.name).toBe("function")
-//     });
-//
-// });
+describe("TodoList", () => {
+    if('has a created hook', () => {
+    });
+
+    expect(typeof TodoItem.name).toBe("function")
+});
