@@ -103,3 +103,5 @@ typings/
 .idea/
 
 package-lock.json
+
+dist/
