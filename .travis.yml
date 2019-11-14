@@ -4,5 +4,10 @@ node_js:
 cache:
   directories:
     - webapp/node_modules
+    - backend/node_modules
+install:
+  - cd webapp && npm install && cd ..
+  - cd backend && npm install && cd ..
+
 script:
-  - npm web:test
+  - npm run web:test
