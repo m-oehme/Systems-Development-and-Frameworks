@@ -5,11 +5,9 @@
   "scripts": {
     "web:serve": "cd webapp && npm run serve",
     "web:build": "cd webapp && npm run build",
-    "web:lint": "cd webapp && npm run lint",
-    "web:test": "cd webapp && npm run test"
+    "web:test": "cd webapp && npm test",
+    "backend:start": "cd backend && npm run build && npm start"
   },
-  "dependencies": {
-  },
-  "devDependencies": {
-  }
+  "dependencies": {},
+  "devDependencies": {}
 }
