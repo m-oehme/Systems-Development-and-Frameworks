@@ -1,6 +1,6 @@
 <template>
-  <div id="app">
-    <div>
+  <div id="app" class="apollo">
+    <div id="grettings">
       {{ message }}
     </div>
     <TodoList />
@@ -8,20 +8,27 @@
 </template>
 
 <script>
+import gql from "graphql-tag";
 import TodoList from "./components/TodoList";
 
 export default {
-  name: 'app',
+  name: "app",
   components: {
     TodoList
   },
+  apollo: {
+    message: gql`
+      query {
+        message: hello
+      }
+    `
+  },
   data() {
     return {
-      message: "Hello Vue!",
-    }
+      message: "Hello Vue!"
+    };
   }
-}
+};
 </script>
 
-<style>
-</style>
+<style></style>
