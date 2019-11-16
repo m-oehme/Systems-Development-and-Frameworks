@@ -8,8 +8,13 @@
     "web:test": "cd webapp && npm test",
     "backend:start": "cd backend && npm run build && npm start"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@babel/core": "^7.7.2",
+    "babel-core": "^7.0.0-bridge.0"
+  },
   "devDependencies": {
+    "babel-eslint": "^10.0.3",
+    "eslint": "^5.16.0",
     "husky": "^3.0.9",
     "prettier": "1.19.1",
     "pretty-quick": "^2.0.1"
@@ -18,5 +23,28 @@
     "hooks": {
       "pre-commit": "pretty-quick --staged"
     }
-  }
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "rules": {},
+    "parserOptions": {
+      "parser": "babel-eslint"
+    }
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions"
+  ]
 }
