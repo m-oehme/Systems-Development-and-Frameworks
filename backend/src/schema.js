@@ -9,6 +9,7 @@ const typeDefs = gql`
     author: String
   }
 
+  # This is an example on how to do a schema for todolist. Author is not requireed!
   type Todo {
     message: String
     author: Author
