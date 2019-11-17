@@ -101,5 +101,7 @@ typings/
 .dynamodb/
 
 .idea/
-dist/
+
 package-lock.json
+
+dist/
