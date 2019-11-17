@@ -7,7 +7,7 @@
     "build": "babel src/ -d dist/ --copy-files",
     "start": "node dist/",
     "lint": "eslint src --config .eslintrc.js",
-    "test": "jest --verbose"
+    "test": "jest --verbose -u"
   },
   "keywords": [],
   "author": "",
