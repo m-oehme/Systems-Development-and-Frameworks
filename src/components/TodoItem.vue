@@ -6,7 +6,7 @@
       <button id="delete" @click="delToDo">Delete</button>
     </div>
     <div v-else>
-      <input v-model="temp" />
+      <input v-model="temp.message" />
       <button id="save" @click="save">Save</button>
       <button @click="cancel">Cancel</button>
     </div>
@@ -16,10 +16,10 @@
 <script>
 export default {
   name: "TodoItem",
-  props: ["todo", "index"],
+  props: ["todo", "index", "editMode"],
   data() {
     return {
-      isEditing: this.todo.isEditing,
+      isEditing: this.editMode,
       temp: this.todo
     };
   },
