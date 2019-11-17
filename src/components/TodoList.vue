@@ -35,7 +35,7 @@ export default {
       this.initialEditMode = true;
       this.todoListData.push({
         id: this.lastID,
-        message: "New ToDo"
+        message: "New Todo"
       });
     },
     deleteEntry: function(todo) {
