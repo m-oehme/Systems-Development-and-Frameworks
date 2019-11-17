@@ -40,8 +40,8 @@ export default {
     deleteEntry: function(index) {
       this.todoListData.splice(index, 1);
     },
-    saveEntry: function(msg, index) {
-      this.todoListData[index].message = msg;
+    saveEntry: function(todo, index) {
+      this.todoListData[index] = todo;
     }
   }
 };
