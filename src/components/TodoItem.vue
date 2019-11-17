@@ -16,7 +16,7 @@
 <script>
 export default {
   name: "TodoItem",
-  props: ["todo", "index", "editMode"],
+  props: ["todo", "editMode"],
   data() {
     return {
       isEditing: this.editMode,
@@ -30,12 +30,12 @@ export default {
     },
     delToDo: function() {
       this.isEditing = false;
-      this.$parent.deleteEntry(this.index);
+      this.$parent.deleteEntry(this.todo);
     },
     save: function() {
       this.isEditing = false;
       this.todo = this.temp;
-      this.$parent.saveEntry(this.todo, this.index);
+      this.$parent.saveEntry(this.todo);
     },
     cancel: function() {
       this.isEditing = false;

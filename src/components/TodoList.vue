@@ -3,9 +3,8 @@
     <button id="add" @click="addEntry">Add</button>
     <ol>
       <TodoItem
-        v-for="(todo, index) in todoListData"
+        v-for="todo in todoListData"
         :todo="todo"
-        :index="index"
         :edit-mode="initialEditMode"
         :key="todo.id"
       />
@@ -39,10 +38,16 @@ export default {
         message: "New ToDo"
       });
     },
-    deleteEntry: function(index) {
+    deleteEntry: function(todo) {
+      let index = this.todoListData.findIndex(
+        todoData => todoData.id === todo.id
+      );
       this.todoListData.splice(index, 1);
     },
-    saveEntry: function(todo, index) {
+    saveEntry: function(todo) {
+      let index = this.todoListData.findIndex(
+        todoData => todoData.id === todo.id
+      );
       this.todoListData[index] = todo;
     }
   }
