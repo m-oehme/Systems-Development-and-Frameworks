@@ -30,12 +30,12 @@ export default {
     },
     delToDo: function() {
       this.isEditing = false;
-      this.$parent.deleteEntry(this.todo);
+      this.$emit("delete-entry", this.todo);
     },
     save: function() {
       this.isEditing = false;
       this.todo = this.temp;
-      this.$parent.saveEntry(this.todo);
+      this.$emit("save-entry", this.todo);
     },
     cancel: function() {
       this.isEditing = false;

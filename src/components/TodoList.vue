@@ -7,6 +7,8 @@
         :todo="todo"
         :edit-mode="initialEditMode"
         :key="todo.id"
+        @delete-entry="deleteEntry"
+        @save-entry="saveEntry"
       />
     </ol>
   </div>
