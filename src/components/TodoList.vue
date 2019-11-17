@@ -29,7 +29,7 @@ export default {
     };
   },
   methods: {
-    addEntry: function() {
+    addEntry() {
       this.lastID++;
       this.todoListData.push({
         id: this.lastID,
