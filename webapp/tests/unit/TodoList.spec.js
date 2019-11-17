@@ -15,7 +15,7 @@ const wrapper = shallowMount(TodoList, {
 
 describe("TodoList", () => {
   it("contains 3 items", function() {
-    expect(wrapper.findAll(TodoItem).length).toBe(3);
+    expect(wrapper.findAll(TodoItem)).toHaveLength(3);
   });
 
   it("$emits add todo", () => {

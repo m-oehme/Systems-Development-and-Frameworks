@@ -3,10 +3,12 @@
     <button id="add" @click="addEntry">Add</button>
     <ol>
       <TodoItem
-        v-for="(todo, index) in todoListData"
+        v-for="todo in todoListData"
         :todo="todo"
-        :index="index"
+        :edit-mode="initialEditMode"
         :key="todo.id"
+        @delete-entry="deleteEntry"
+        @save-entry="saveEntry"
       />
     </ol>
   </div>
@@ -21,27 +23,34 @@ export default {
   data() {
     return {
       todoListData: [
-        { id: 1, message: "Foo", isEditing: false },
-        { id: 2, message: "Bar", isEditing: false },
-        { id: 3, message: "Baz", isEditing: false }
+        { id: 1, message: "Foo" },
+        { id: 2, message: "Bar" },
+        { id: 3, message: "Baz" }
       ],
+      initialEditMode: false,
       lastID: 3
     };
   },
   methods: {
-    addEntry: function() {
+    addEntry() {
       this.lastID++;
+      this.initialEditMode = true;
       this.todoListData.push({
         id: this.lastID,
-        message: "New ToDo",
-        isEditing: true
+        message: "New Todo"
       });
     },
-    deleteEntry: function(index) {
+    deleteEntry: function(todo) {
+      let index = this.todoListData.findIndex(
+        todoData => todoData.id === todo.id
+      );
       this.todoListData.splice(index, 1);
     },
-    saveEntry: function(msg, index) {
-      this.todoListData[index].message = msg;
+    saveEntry: function(todo) {
+      let index = this.todoListData.findIndex(
+        todoData => todoData.id === todo.id
+      );
+      this.todoListData[index] = todo;
     }
   }
 };
