@@ -6,6 +6,7 @@
   "scripts": {
     "build": "babel src/ -d dist/ --copy-files",
     "start": "node dist/",
+    "lint": "eslint src --config .eslintrc.js",
     "test": "jest --verbose"
   },
   "keywords": [],
@@ -28,24 +29,14 @@
     "babel-eslint": "~10.0.3",
     "babel-jest": "~24.9.0",
     "eslint": "^5.16.0",
-    "eslint-plugin-vue": "^5.0.0",
+    "eslint-config-prettier": "^6.6.0",
+    "eslint-plugin-jest": "^23.0.4",
+    "eslint-plugin-prettier": "^3.1.1",
     "husky": "^3.0.9",
     "jest": "^24.9.0",
     "prettier": "1.19.1",
-    "pretty-quick": "^2.0.1"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "eslint:recommended"
-    ],
-    "rules": {},
-    "parserOptions": {
-      "parser": "babel-eslint"
-    }
+    "pretty-quick": "^2.0.1",
+    "typescript": "^2.8.0"
   },
   "postcss": {
     "plugins": {

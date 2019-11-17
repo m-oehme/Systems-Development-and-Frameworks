@@ -5,8 +5,10 @@
   "scripts": {
     "web:serve": "cd webapp && npm run serve",
     "web:build": "cd webapp && npm run build",
+    "web:lint": "cd webapp && npm run lint",
     "web:test": "cd webapp && npm test",
     "backend:start": "cd backend && npm run build && npm start",
+    "backend:lint": "cd backend && npm run lint",
     "backend:test": "cd backend && npm test"
   },
   "dependencies": {
@@ -14,29 +16,17 @@
     "babel-core": "^7.0.0-bridge.0"
   },
   "devDependencies": {
-    "babel-eslint": "^10.0.3",
+    "acorn": "^6.3.0",
     "eslint": "^5.16.0",
+    "eslint-plugin-jest": "^23.0.4",
     "husky": "^3.0.9",
     "prettier": "1.19.1",
-    "pretty-quick": "^2.0.1"
+    "pretty-quick": "^2.0.1",
+    "typescript": "^2.9.2"
   },
   "husky": {
     "hooks": {
       "pre-commit": "pretty-quick --staged"
-    }
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/essential",
-      "eslint:recommended"
-    ],
-    "rules": {},
-    "parserOptions": {
-      "parser": "babel-eslint"
     }
   },
   "postcss": {

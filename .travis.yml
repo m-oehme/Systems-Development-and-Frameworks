@@ -6,9 +6,12 @@ cache:
     - webapp/node_modules
     - backend/node_modules
 install:
+  - npm install
   - cd webapp && npm install && cd ..
   - cd backend && npm install && cd ..
 
 script:
+  - npm run web:lint
   - npm run web:test
+  - npm run backend:lint
   - npm run backend:test
