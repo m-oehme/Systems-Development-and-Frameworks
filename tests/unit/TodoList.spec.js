@@ -23,12 +23,4 @@ describe("TodoList", () => {
 
     expect(wrapper.emitted()).toBeTruthy();
   });
-
-  // describe("delete item from todolist", () => {
-  //   it('delete item', () => {
-  //     wrapper.find("button#delete").trigger("click");
-  //
-  //     expect(wrapper.findAll(TodoItem).length).toBe(2)
-  //   });
-  // })
 });
