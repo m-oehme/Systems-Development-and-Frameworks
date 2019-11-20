@@ -13,7 +13,7 @@ Test-drive the development of a GraphQL server.
    Pro tip: I run queries and mutations against an apollo server and check the
    response with jest's [`toMatchObject`](https://jestjs.io/docs/en/expect#tomatchobjectobject)
    matcher all the time. You can use it to check for errors as well.
-4. :x: Write type definitions for your schema. Please have at least one attribute
+4. :heavy_check_mark: Write type definitions for your schema. Please have at least one attribute
    which returns another custom type. E.g. a todo has an assignee, see point 6.
 5. :x: Implement a backend server with [apollo-server](https://github.com/apollographql/apollo-server).
    Your queries and mutations should roughly map the CRUD operations for your
