@@ -9,7 +9,7 @@ Test-drive the development of a GraphQL server.
    it.todo("behaves in a specified way");
    ```
    will create a to-be-implemented test case with this description.
-3. :x: Implement your tests with [apollo-server-testing](https://www.apollographql.com/docs/apollo-server/testing/testing/).
+3. :heavy_plus_sign: Implement your tests with [apollo-server-testing](https://www.apollographql.com/docs/apollo-server/testing/testing/).
    Pro tip: I run queries and mutations against an apollo server and check the
    response with jest's [`toMatchObject`](https://jestjs.io/docs/en/expect#tomatchobjectobject)
    matcher all the time. You can use it to check for errors as well.

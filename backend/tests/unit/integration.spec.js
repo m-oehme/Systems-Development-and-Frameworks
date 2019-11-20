@@ -52,21 +52,60 @@ const UPDATE_TODO = gql`
 `;
 
 describe("Querys", () => {
-  it("receiving hello world message", async () => {
+  let query;
+  beforeEach ( () => {
     const { testServer } = constructTestServer();
-
     // use the test server to create a query function
-    const { query } = createTestClient(testServer);
+    query = createTestClient(testServer);
+  });
 
+  it("receiving hello world message", async () => {
     const res = await query({ query: GET_HELLO, variables: { id: 1 } });
     expect(res).toMatchSnapshot();
   });
 
-  it.todo("receiving todolist response");
+  it("receiving todolist response", async () => {
+    const res = await query({ query: GET_TODOS });
+    expect(res).toMatchSnapshot();
+  });
+
 });
 
 describe("Mutations", () => {
-  it.todo("delete todo");
-  it.todo("add todo");
-  it.todo("update todo");
+  let query;
+  beforeEach ( () => {
+    const { testServer } = constructTestServer();
+    // use the test server to create a query function
+    query = createTestClient(testServer);
+  });
+
+
+  it("delete todo", async () => {
+    const res = await query({ query: DEL_TODO, variables: { id: 1 } });
+    expect(res).toMatchSnapshot();
+  });
+
+  it("add todo", async () => {
+    let todo = {
+      id: 5,
+      message: "Me was added.",
+      author: {
+        name: "Max Mustermann"
+      }
+    }
+    const res = await query({ query: ADD_TODO, variables: { newToDo: todo } });
+    expect(res).toMatchSnapshot();
+  });
+
+  it("update todo", async () => {
+    let todo = {
+      id: 1,
+      message: "Hello Update.",
+      author: {
+        name: "Max Mustermann"
+      }
+    }
+    const res = await query({ query: UPDATE_TODO, variables: { update: todo }});
+    expect(res).toMatchSnapshot();
+  });
 });
