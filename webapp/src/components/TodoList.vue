@@ -1,8 +1,18 @@
 <template>
   <div id="todo_list">
-    <div style="display: flow-root">
+    <div id="todo_list_head">
       <div id="todo_list_title">Todo List</div>
-      <button id="add" @click="addEntry">Add New Todo</button>
+      <div v-if="!isEditingAuthor" class="head_right">
+        <button class="bigGreen" @click="addEntry">Add New Todo</button>
+        <div style="font-style: italic">
+          Current editor is {{ author.name }}
+        </div>
+        <button class="smallGray" @click="editAuthor">Edit</button>
+      </div>
+      <div v-else class="head_right">
+        <button class="bigGreen" @click="saveAuthor">Save Author</button>
+        <input v-model="author.name" />
+      </div>
     </div>
     <ol>
       <TodoItem
@@ -31,6 +41,8 @@ export default {
         { id: 3, message: "Baz", author: { name: "Max" } }
       ],
       initialEditMode: false,
+      author: { name: "Max" },
+      isEditingAuthor: false,
       lastID: 3
     };
   },
@@ -54,6 +66,12 @@ export default {
         todoData => todoData.id === todo.id
       );
       this.todoListData[index] = todo;
+    },
+    editAuthor() {
+      this.isEditingAuthor = true;
+    },
+    saveAuthor() {
+      this.isEditingAuthor = false;
     }
   }
 };
@@ -80,10 +98,16 @@ export default {
   font-size: 18px;
   font-weight: bold;
 }
-#add {
+.head_right {
   float: right;
 }
-button {
+#todo_list_head {
+  display: flow-root;
+}
+.head_right > * {
+  display: block;
+}
+button.bigGreen {
   background: white;
   border: darkgreen 1px solid;
   border-radius: 4px;
@@ -91,8 +115,20 @@ button {
   color: darkgreen;
   font-size: 14px;
 }
-button:hover {
+button.bigGreen:hover {
   background: darkgreen;
+  color: white;
+}
+button.smallGray {
+  background: white;
+  border: gray 1px solid;
+  border-radius: 4px;
+  margin: 2px;
+  color: gray;
+  font-size: 12px;
+}
+button.smallGray:hover {
+  background: gray;
   color: white;
 }
 </style>
