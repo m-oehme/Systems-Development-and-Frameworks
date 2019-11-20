@@ -53,7 +53,9 @@ export default {
       this.todoListData.push({
         id: this.lastID,
         message: "New Todo",
-        author: this.author
+        author: {
+          name: this.author.name
+        }
       });
     },
     deleteEntry: function(todo) {
