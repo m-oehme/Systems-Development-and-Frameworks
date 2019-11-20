@@ -11,18 +11,17 @@ Develop: [![Build Status](https://travis-ci.com/m-oehme/Systems-Development-and-
 | [@6csharpmajor](https://github.com/6csharpmajor) | Victor |
 
 ## Exercises
-- 1 - :heavy_check_mark:
-- 2 - :heavy_check_mark:
-- 3 - :heavy_plus_sign:
-- ...
-:heavy_check_mark: - finished
-:heavy_plus_sign: - partly finished / wip
-:x: - pending
+1. :heavy_check_mark:  
+2. :heavy_check_mark:  
+3. :heavy_plus_sign:  
+
+:heavy_check_mark: - finished  
+:heavy_plus_sign: - partly finished / wip  
+:x: - pending  
 
 ## Development Envorment Setup
 
-[WebStrom IDE by Jetbrains](https://www.jetbrains.com/webstorm/) is preferred for development.
-
+[WebStrom IDE by Jetbrains](https://www.jetbrains.com/webstorm/) is preferred for development.  
 [Visual Studio Code by Microsoft](https://code.visualstudio.com/) is also used for development.
 
 As Package Manager `npm` was used.
