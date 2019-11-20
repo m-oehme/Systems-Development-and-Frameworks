@@ -9,11 +9,11 @@ const GET_HELLO = gql`
   }
 `;
 
-// const GET_TODOS = gql`
-//     query {
-//         todo: todo
-//     }
-// `;
+const GET_TODOS = gql`
+    query {
+      todos: todo 
+    }
+`;
 
 describe("Querys", () => {
   it("receiving hello world message", async () => {
@@ -31,4 +31,6 @@ describe("Querys", () => {
 
 describe("Mutations", () => {
   it.todo("delete todo");
+  it.todo("add todo");
+  it.todo("update todo");
 });
