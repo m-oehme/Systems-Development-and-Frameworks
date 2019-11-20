@@ -3,7 +3,7 @@
 Test-drive the development of a GraphQL server.
 
 1. :heavy_check_mark: Setup an [apollo-server](https://www.apollographql.com/docs/apollo-server/).
-2. :x: Test drive your integration tests. As a first step, you can just write down
+2. :heavy_check_mark: Test drive your integration tests. As a first step, you can just write down
    the documentation, e.g.
    ```js
    it.todo("behaves in a specified way");
