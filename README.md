@@ -13,7 +13,9 @@ Develop: [![Build Status](https://travis-ci.com/m-oehme/Systems-Development-and-
 ## Exercises
 1. :heavy_check_mark:  
 2. :heavy_check_mark:  
-3. :heavy_plus_sign:  
+3. :heavy_plus_sign:
+4. :x:
+5. :x:
 
 :heavy_check_mark: - finished  
 :heavy_plus_sign: - partly finished / wip  
