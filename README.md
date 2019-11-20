@@ -10,7 +10,7 @@ Develop: [![Build Status](https://travis-ci.com/m-oehme/Systems-Development-and-
 | [@m-oehme](https://github.com/m-oehme)           | Max O. |
 | [@6csharpmajor](https://github.com/6csharpmajor) | Victor |
 
-## Exercises
+## Full Exercises Overview
 1. :heavy_check_mark:  
 2. :heavy_check_mark:  
 3. :heavy_plus_sign:
