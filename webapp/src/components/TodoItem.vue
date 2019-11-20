@@ -1,14 +1,20 @@
 <template>
-  <li>
+  <li class="todo_item">
     <div v-if="!isEditing">
-      {{ todo.message }}
-      <button id="edit" @click="edit">Edit</button>
-      <button id="delete" @click="delToDo">Delete</button>
+      <div class="todo_message">{{ todo.message }}</div>
+      <div class="todo_author">Created by {{ todo.author.name }}</div>
+      <div>
+        <button id="edit" @click="edit">Edit</button>
+        <button id="delete" @click="delToDo">Delete</button>
+      </div>
     </div>
     <div v-else>
       <input v-model="temp.message" />
-      <button id="save" @click="save">Save</button>
-      <button @click="cancel">Cancel</button>
+      <div class="todo_author">Created by {{ todo.author.name }}</div>
+      <div>
+        <button id="save" @click="save">Save</button>
+        <button @click="cancel">Cancel</button>
+      </div>
     </div>
   </li>
 </template>
@@ -44,4 +50,29 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.todo_item {
+  padding: 2px;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+.todo_message {
+  margin-right: 16px;
+}
+.todo_author {
+  font-style: italic;
+  font-size: 12px;
+  padding: 2px;
+}
+button {
+  background: white;
+  border: gray 1px solid;
+  border-radius: 4px;
+  margin: 2px;
+  color: gray;
+}
+button:hover {
+  background: gray;
+  color: white;
+}
+</style>
