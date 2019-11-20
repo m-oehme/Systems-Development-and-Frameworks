@@ -10,9 +10,45 @@ const GET_HELLO = gql`
 `;
 
 const GET_TODOS = gql`
-    query {
-      todos: todo 
+  query {
+    todos {
+        id
+        text
+        author {
+          name
+        }
     }
+  }
+`;
+
+
+const DEL_TODO = gql`
+  mutation delToDo($id: ID) {
+    delToDo(id = $id)
+  }
+`;
+
+const ADD_TODO = gql`
+  mutation addToDo($todo: TODO) {
+    addToDo(newToDo = $todo) {
+      id 
+      text
+      author {
+        name
+      }
+    }
+  }
+`;
+
+const UPDATE_TODO = gql`
+  mutation updateToDo($update: TODO) {
+    updateToDo(updatedToDo = $update) {
+      id 
+      text
+      author {
+        name
+    }
+  }
 `;
 
 describe("Querys", () => {
