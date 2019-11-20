@@ -15,7 +15,7 @@ const GET_HELLO = gql`
 //     }
 // `;
 
-describe("Testing Querys", () => {
+describe("Querys", () => {
   it("receiving hello world message", async () => {
     const { testServer } = constructTestServer();
 
@@ -27,4 +27,8 @@ describe("Testing Querys", () => {
   });
 
   it.todo("receiving todolist response");
+});
+
+describe("Mutations", () => {
+  it.todo("delete todo");
 });
