@@ -24,53 +24,127 @@
         :key="todo.id"
         @delete-entry="deleteEntry"
         @save-entry="saveEntry"
+        @remove-entry-local="removeEntryLocal"
       />
     </ol>
   </div>
 </template>
 
 <script>
+import gql from "graphql-tag";
 import TodoItem from "./TodoItem";
 
 export default {
   name: "TodoList",
   components: { TodoItem },
+  apollo: {
+    todoListData: gql`
+      query {
+        todoListData: todos {
+          id
+          text
+          author {
+            name
+          }
+        }
+      }
+    `
+  },
   data() {
     return {
-      todoListData: [
-        { id: 1, message: "Foo", author: { name: "Max" } },
-        { id: 2, message: "Bar", author: { name: "Max" } },
-        { id: 3, message: "Baz", author: { name: "Max" } }
-      ],
       initialEditMode: false,
       author: { name: "Max" },
-      isEditingAuthor: false,
-      lastID: 3
+      isEditingAuthor: false
     };
   },
   methods: {
+    removeEntryLocal() {
+      this.todoListData.splice(this.todoListData.length - 1, 1);
+    },
     addEntry() {
-      this.lastID++;
       this.initialEditMode = true;
-      this.todoListData.push({
-        id: this.lastID,
+      const newTodo = {
         message: "New Todo",
         author: {
           name: this.author.name
         }
-      });
+      };
+      this.todoListData.push(newTodo);
     },
     deleteEntry: function(todo) {
-      let index = this.todoListData.findIndex(
-        todoData => todoData.id === todo.id
-      );
-      this.todoListData.splice(index, 1);
+      this.$apollo
+        .mutate({
+          mutation: gql`
+            mutation delToDo($id: ID) {
+              delToDo(id: $id) {
+                id
+                text
+                author {
+                  name
+                }
+              }
+            }
+          `,
+          variables: {
+            id: todo.id
+          }
+        })
+        .then(body => {
+          this.todoListData = body.data.delToDo.slice();
+        });
     },
     saveEntry: function(todo) {
-      let index = this.todoListData.findIndex(
-        todoData => todoData.id === todo.id
-      );
-      this.todoListData[index] = todo;
+      if (todo.id == null) {
+        this.initialEditMode = false;
+        this.$apollo
+          .mutate({
+            mutation: gql`
+              mutation addToDo($text: String!, $authorName: String!) {
+                addToDo(text: $text, authorName: $authorName) {
+                  id
+                  text
+                  author {
+                    name
+                  }
+                }
+              }
+            `,
+            variables: {
+              text: todo.text,
+              authorName: todo.author.name
+            }
+          })
+          .then(body => {
+            this.todoListData = body.data.addToDo.slice();
+          });
+      } else {
+        this.$apollo
+          .mutate({
+            mutation: gql`
+              mutation updateToDo(
+                $id: ID!
+                $text: String!
+                $authorName: String!
+              ) {
+                updateToDo(id: $id, text: $text, authorName: $authorName) {
+                  id
+                  text
+                  author {
+                    name
+                  }
+                }
+              }
+            `,
+            variables: {
+              id: todo.id,
+              text: todo.text,
+              authorName: todo.author.name
+            }
+          })
+          .then(body => {
+            this.todoListData = body.data.updateToDo.slice();
+          });
+      }
     },
     editAuthor() {
       this.isEditingAuthor = true;

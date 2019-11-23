@@ -8,10 +8,10 @@ Test-drive the development of a GraphQL server.
 
 1. :heavy_check_mark: Show that you can can setup an [apollo-server](https://www.apollographql.com/docs/apollo-server/).
 2. :heavy_check_mark: Test your backend with [apollo-server-testing](https://www.apollographql.com/docs/apollo-server/testing/testing/).
-3. Implement [JWT](https://jwt.io/) and have at least one query which requires authentication.
-4. Add backend testing to your build server pipeline.
-5. Request a review from @roschaefer
-6. Request a review from sb. else
+3. :x: Implement [JWT](https://jwt.io/) and have at least one query which requires authentication.
+4. :heavy_check_mark: Add backend testing to your build server pipeline.
+5. :x: Request a review from @roschaefer
+6. :x: Request a review from sb. else
 
 Note that it is **not required** that you connect your frontend with your
 backend.
@@ -41,7 +41,7 @@ backend.
   and [graphql-middleware](https://github.com/prisma-labs/graphql-middleware).
 - Here is some inspiration how your test cases could look like:
   ![Test cases for a permission layer](./permissions.png)
-- Connect your frontend with your backend via [vue-apollo](https://github.com/vuejs/vue-apollo).
+- :heavy_check_mark: Connect your frontend with your backend via [vue-apollo](https://github.com/vuejs/vue-apollo).
   So if you update a todo in your frontend, it sends a graphql mutation to the
   backend.
 

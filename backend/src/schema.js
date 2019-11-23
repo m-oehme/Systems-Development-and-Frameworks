@@ -18,8 +18,8 @@ const typeDefs = gql`
 
   type Mutation {
     delToDo(id: ID): [Todo]
-    addToDo(text: String!, authorName: String!): Todo
-    updateToDo(id: ID!, text: String!, authorName: String!): Todo
+    addToDo(text: String!, authorName: String!): [Todo]
+    updateToDo(id: ID!, text: String!, authorName: String!): [Todo]
   }
 
   schema {

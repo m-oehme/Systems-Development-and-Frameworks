@@ -27,13 +27,13 @@ const resolvers = {
           name: params.authorName
         }
       });
-      return todoListData[todoListData.length - 1];
+      return todoListData;
     },
     updateToDo: (object, params) => {
       let index = todoListData.findIndex(todoData => todoData.id === params.id);
       todoListData[index].text = params.text;
       todoListData[index].author.name = params.authorName;
-      return todoListData[index];
+      return todoListData;
     }
   },
 

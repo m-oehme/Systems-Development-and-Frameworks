@@ -1,7 +1,7 @@
 <template>
   <li class="todo_item">
     <div v-if="!isEditing">
-      <div class="todo_message">{{ todo.message }}</div>
+      <div class="todo_message">{{ todo.text }}</div>
       <div class="todo_author">Created by {{ todo.author.name }}</div>
       <div>
         <button id="edit" @click="edit">Edit</button>
@@ -9,7 +9,7 @@
       </div>
     </div>
     <div v-else>
-      <input v-model="temp.message" />
+      <input v-model="temp.text" />
       <div class="todo_author">Created by {{ todo.author.name }}</div>
       <div>
         <button id="save" @click="save">Save</button>
@@ -44,6 +44,9 @@ export default {
       this.$emit("save-entry", this.todo);
     },
     cancel: function() {
+      if (this.todo.id == null) {
+        this.$emit("remove-entry-local");
+      }
       this.isEditing = false;
     }
   }

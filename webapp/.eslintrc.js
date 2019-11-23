@@ -21,5 +21,7 @@ module.exports = {
     parser: "babel-eslint"
   },
   plugins: ["vue"],
-  rules: {}
+  rules: {
+    "no-console": "off"
+  }
 };

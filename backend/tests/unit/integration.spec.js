@@ -124,7 +124,7 @@ describe("Mutations", () => {
       })
     ).resolves.toMatchObject({
       data: {
-        addToDo: newtodo
+        addToDo: todoListData
       }
     });
   });
@@ -141,7 +141,7 @@ describe("Mutations", () => {
       })
     ).resolves.toMatchObject({
       data: {
-        updateToDo: updatedTodo
+        updateToDo: todoListData
       }
     });
   });
