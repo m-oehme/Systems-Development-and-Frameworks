@@ -1,3 +1,5 @@
+const { hello, todoListData } = require("../../src/data");
+
 const { gql } = require("apollo-server");
 const { createTestClient } = require("apollo-server-testing");
 
@@ -12,26 +14,31 @@ const GET_HELLO = gql`
 const GET_TODOS = gql`
   query {
     todos {
-        id
-        text
-        author {
-          name
-        }
+      id
+      text
+      author {
+        name
+      }
     }
   }
 `;
 
-
 const DEL_TODO = gql`
   mutation delToDo($id: ID) {
-    delToDo(id = $id)
+    delToDo(id: $id) {
+      id
+      text
+      author {
+        name
+      }
+    }
   }
 `;
 
 const ADD_TODO = gql`
-  mutation addToDo($todo: TODO) {
-    addToDo(newToDo = $todo) {
-      id 
+  mutation addToDo($text: String!, $authorName: String!) {
+    addToDo(text: $text, authorName: $authorName) {
+      id
       text
       author {
         name
@@ -41,71 +48,101 @@ const ADD_TODO = gql`
 `;
 
 const UPDATE_TODO = gql`
-  mutation updateToDo($update: TODO) {
-    updateToDo(updatedToDo = $update) {
-      id 
+  mutation updateToDo($id: ID!, $text: String!, $authorName: String!) {
+    updateToDo(id: $id, text: $text, authorName: $authorName) {
+      id
       text
       author {
         name
+      }
     }
   }
 `;
 
-describe("Querys", () => {
-  let query;
-  beforeEach ( () => {
-    const { testServer } = constructTestServer();
-    // use the test server to create a query function
-    query = createTestClient(testServer);
-  });
+let query;
+let mutate;
 
+beforeAll(() => {
+  const { testServer } = constructTestServer();
+  // use the test server to create a query function
+  query = createTestClient(testServer).query;
+  mutate = createTestClient(testServer).mutate;
+});
+
+describe("Querys", () => {
   it("receiving hello world message", async () => {
-    const res = await query({ query: GET_HELLO, variables: { id: 1 } });
-    expect(res).toMatchSnapshot();
+    await expect(query({ query: GET_HELLO })).resolves.toMatchObject({
+      data: {
+        message: hello
+      }
+    });
   });
 
   it("receiving todolist response", async () => {
-    const res = await query({ query: GET_TODOS });
-    expect(res).toMatchSnapshot();
+    await expect(query({ query: GET_TODOS })).resolves.toMatchObject({
+      data: {
+        todos: todoListData
+      }
+    });
   });
-
 });
 
 describe("Mutations", () => {
-  let query;
-  beforeEach ( () => {
-    const { testServer } = constructTestServer();
-    // use the test server to create a query function
-    query = createTestClient(testServer);
+  let newtodo, updatedTodo;
+  beforeEach(() => {
+    newtodo = {
+      text: "Me was added.",
+      author: {
+        name: "Max Mustermann"
+      }
+    };
+
+    updatedTodo = {
+      id: "2",
+      text: "Hello Update.",
+      author: {
+        name: "Max Mustermann"
+      }
+    };
   });
 
-
   it("delete todo", async () => {
-    const res = await query({ query: DEL_TODO, variables: { id: 1 } });
-    expect(res).toMatchSnapshot();
+    await expect(
+      mutate({ mutation: DEL_TODO, variables: { id: 1 } })
+    ).resolves.toMatchObject({
+      data: {
+        delToDo: todoListData
+      }
+    });
   });
 
   it("add todo", async () => {
-    let todo = {
-      id: 5,
-      message: "Me was added.",
-      author: {
-        name: "Max Mustermann"
+    await expect(
+      mutate({
+        mutation: ADD_TODO,
+        variables: { text: newtodo.text, authorName: newtodo.author.name }
+      })
+    ).resolves.toMatchObject({
+      data: {
+        addToDo: newtodo
       }
-    }
-    const res = await query({ query: ADD_TODO, variables: { newToDo: todo } });
-    expect(res).toMatchSnapshot();
+    });
   });
 
   it("update todo", async () => {
-    let todo = {
-      id: 1,
-      message: "Hello Update.",
-      author: {
-        name: "Max Mustermann"
+    await expect(
+      mutate({
+        mutation: UPDATE_TODO,
+        variables: {
+          id: updatedTodo.id,
+          text: updatedTodo.text,
+          authorName: updatedTodo.author.name
+        }
+      })
+    ).resolves.toMatchObject({
+      data: {
+        updateToDo: updatedTodo
       }
-    }
-    const res = await query({ query: UPDATE_TODO, variables: { update: todo }});
-    expect(res).toMatchSnapshot();
+    });
   });
 });
