@@ -18,7 +18,7 @@
     </div>
     <ol>
       <TodoItem
-        v-for="todo in todoListData"
+        v-for="todo in this.todoListData"
         :todo="todo"
         :edit-mode="initialEditMode"
         :key="todo.id"

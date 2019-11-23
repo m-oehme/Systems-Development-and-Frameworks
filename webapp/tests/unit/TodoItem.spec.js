@@ -5,7 +5,7 @@ const wrapper = shallowMount(TodoItem, {
   propsData: {
     todo: {
       id: 1,
-      message: "todo.text",
+      text: "todo.text",
       author: {
         name: "Max Mustermannnnnnn"
       }
@@ -30,7 +30,6 @@ describe("TodoItem", () => {
 
     describe("edit text and submit", () => {
       it("$emits save with edited todo", () => {
-        // wrapper.find("input").setValue("edited.todo.text");
         wrapper.find("#save").trigger("click");
 
         expect(wrapper.emitted()).toBeTruthy();
