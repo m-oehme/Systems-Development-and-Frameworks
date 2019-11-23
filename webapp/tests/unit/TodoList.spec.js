@@ -19,7 +19,7 @@ describe("TodoList", () => {
   });
 
   it("$emits add todo", () => {
-    wrapper.find("#add").trigger("click");
+    wrapper.find("#addTodo").trigger("click");
 
     expect(wrapper.emitted()).toBeTruthy();
   });

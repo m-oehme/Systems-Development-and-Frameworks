@@ -5,7 +5,10 @@ const wrapper = shallowMount(TodoItem, {
   propsData: {
     todo: {
       id: 1,
-      message: "todo.text"
+      message: "todo.text",
+      author: {
+        name: "Max Mustermannnnnnn"
+      }
     }
   }
 });

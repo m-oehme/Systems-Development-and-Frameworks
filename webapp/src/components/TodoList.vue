@@ -3,7 +3,9 @@
     <div id="todo_list_head">
       <div id="todo_list_title">Todo List</div>
       <div v-if="!isEditingAuthor" class="head_right">
-        <button class="bigGreen" @click="addEntry">Add New Todo</button>
+        <button id="addTodo" class="bigGreen" @click="addEntry">
+          Add New Todo
+        </button>
         <div style="font-style: italic">
           Current editor is {{ author.name }}
         </div>
