@@ -14,8 +14,8 @@ module.exports.typeDefs = mergeTypes(typeDefs, { all: true });
 /* Here are all the Resolvers!
  * Add to the list.
  *  */
-const { TodoResolver } = require("./resolvers/Todo");
-const { HelloWorldResolver } = require("./resolvers/HelloWorld");
+const { TodoResolver } = require("./resolvers/todos");
+const { HelloWorldResolver } = require("./resolvers/helloWorld");
 
 const resolversArray = [TodoResolver, HelloWorldResolver];
 module.exports.resolvers = mergeResolvers(resolversArray);
