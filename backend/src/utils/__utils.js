@@ -1,11 +1,11 @@
 // const { HttpLink } = require('apollo-link-http');
 // const fetch = require('node-fetch');
-const { ApolloServer, gql } = require("apollo-server");
+const { ApolloServer } = require("apollo-server");
 const { HttpLink, execute, toPromise } = require("apollo-server-testing");
 
 module.exports.toPromise = toPromise;
 
-const { typeDefs, resolvers } = require("../../src/schema");
+const { typeDefs, resolvers } = require("../schema");
 
 /**
  * Integration testing utils

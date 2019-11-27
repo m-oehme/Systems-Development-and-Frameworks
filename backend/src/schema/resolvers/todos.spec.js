@@ -1,15 +1,9 @@
-const { hello, todoListData } = require("../../src/data");
+const { todoListData } = require("../../data");
 
 const { gql } = require("apollo-server");
 const { createTestClient } = require("apollo-server-testing");
 
-const { constructTestServer } = require("./__utils");
-
-const GET_HELLO = gql`
-  query {
-    message: hello
-  }
-`;
+const { constructTestServer } = require("../../utils/__utils");
 
 const GET_TODOS = gql`
   query {
@@ -70,14 +64,6 @@ beforeAll(() => {
 });
 
 describe("Querys", () => {
-  it("receiving hello world message", async () => {
-    await expect(query({ query: GET_HELLO })).resolves.toMatchObject({
-      data: {
-        message: hello
-      }
-    });
-  });
-
   it("receiving todolist response", async () => {
     await expect(query({ query: GET_TODOS })).resolves.toMatchObject({
       data: {
