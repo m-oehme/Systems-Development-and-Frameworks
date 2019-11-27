@@ -1,19 +1,14 @@
 const { gql } = require("apollo-server");
 
-const typeDefs = gql`
+module.exports.TodoType = gql`
   type Todo {
     id: ID
     text: String
     author: Author
   }
 
-  type Author {
-    name: String
-  }
-
   type Query {
     todos: [Todo]
-    hello: String
   }
 
   type Mutation {
@@ -27,5 +22,3 @@ const typeDefs = gql`
     mutation: Mutation
   }
 `;
-
-module.exports.typeDefs = typeDefs;

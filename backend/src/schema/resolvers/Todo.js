@@ -1,13 +1,16 @@
-const { todoListData, hello } = require("./data");
+const { todoListData } = require("../../data");
 
-// Resolvers define the technique for fetching the types defined in the
-// schema. This resolver retrieves books from the "books" array above.
-const resolvers = {
+module.exports.TodoResolver = {
+  Todo: {
+    author(todo) {
+      return todoListData.find(value => {
+        return todo.id === value.id;
+      }).author;
+    }
+  },
   Query: {
-    hello: () => hello,
     todos: () => todoListData
   },
-
   Mutation: {
     delToDo: (object, params) => {
       let index = todoListData.findIndex(todoData => todoData.id === params.id);
@@ -35,15 +38,5 @@ const resolvers = {
       todoListData[index].author.name = params.authorName;
       return todoListData;
     }
-  },
-
-  Todo: {
-    author(todo) {
-      return todoListData.find(value => {
-        return todo.id === value.id;
-      }).author;
-    }
   }
 };
-
-module.exports.resolvers = resolvers;

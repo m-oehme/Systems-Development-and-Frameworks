@@ -5,8 +5,7 @@ const { HttpLink, execute, toPromise } = require("apollo-server-testing");
 
 module.exports.toPromise = toPromise;
 
-const { typeDefs } = require("../../src/schema");
-const { resolvers } = require("../../src/resolver");
+const { typeDefs, resolvers } = require("../../src/schema");
 
 /**
  * Integration testing utils
