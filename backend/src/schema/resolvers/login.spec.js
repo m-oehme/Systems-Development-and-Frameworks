@@ -1,4 +1,4 @@
-// const { login } = require("../../data");
+const { userData } = require("../../data");
 
 const { gql } = require("apollo-server");
 const { createTestClient } = require("apollo-server-testing");
@@ -14,29 +14,31 @@ const POST_LOGIN = gql`
   }
 `;
 
-let query;
 let mutate;
 
 beforeAll(() => {
   const { testServer } = constructTestServer();
-  // use the test server to create a query function
-  query = createTestClient(testServer).query;
   mutate = createTestClient(testServer).mutate;
 });
 
 describe("Mutations", () => {
   it("receiving token on login", async () => {
-    await expect(
-      mutate({
-        mutation: POST_LOGIN,
-        variables: {
-          username: "Max"
-        }
-      })
-    ).resolves.toMatchObject({
-      data: {
-        isLoggedIn: true
+    let res = await mutate({
+      mutation: POST_LOGIN,
+      variables: {
+        username: userData[0].username
       }
     });
+    expect(res.data.login.isLoggedIn).toBeTruthy();
+  });
+
+  it("error wrong username", async () => {
+    let res = await mutate({
+      mutation: POST_LOGIN,
+      variables: {
+        username: "Not A User"
+      }
+    });
+    expect(res.data.login.isLoggedIn).toBeFalsy();
   });
 });

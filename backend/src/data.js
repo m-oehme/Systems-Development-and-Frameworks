@@ -34,3 +34,9 @@ const todoListData = [
 ];
 
 module.exports.todoListData = todoListData;
+
+module.exports.userData = [
+  {
+    username: "Max"
+  }
+];
