@@ -29,6 +29,13 @@ beforeEach(() => {
   wrapper = mount(TodoList, {
     data: function() {
       return propsData;
+    },
+    propsData: {
+      user: {
+        username: "Max",
+        isLoggedIn: true,
+        token: ""
+      }
     }
   });
 });

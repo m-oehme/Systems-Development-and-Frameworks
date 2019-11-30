@@ -97,7 +97,7 @@ describe("Querys", () => {
     });
     expect(res).toMatchObject({
       data: {
-        todos: todoListData
+        todos: todoListData.filter(todo => todo.author.name === "Max")
       }
     });
   });
@@ -109,30 +109,34 @@ describe("Mutations", () => {
     newtodo = {
       text: "Me was added.",
       author: {
-        name: "Max Mustermann"
+        name: "Max"
       }
     };
 
     updatedTodo = {
-      id: "2",
+      id: "3",
       text: "Hello Update.",
       author: {
-        name: "Max Mustermann"
+        name: "Max"
       }
     };
   });
 
   it("delete todo", async () => {
+    const list = todoListData.filter(todo => todo.author.name === "Max");
+    list.splice(0, 1);
     await expect(
       mutate({ mutation: DEL_TODO, variables: { id: 1, token: token } })
     ).resolves.toMatchObject({
       data: {
-        delToDo: todoListData
+        delToDo: list
       }
     });
   });
 
   it("add todo", async () => {
+    const list = todoListData.filter(todo => todo.author.name === "Max");
+    list.push(newtodo);
     await expect(
       mutate({
         mutation: ADD_TODO,
@@ -144,7 +148,7 @@ describe("Mutations", () => {
       })
     ).resolves.toMatchObject({
       data: {
-        addToDo: todoListData
+        addToDo: list
       }
     });
   });
@@ -162,7 +166,7 @@ describe("Mutations", () => {
       })
     ).resolves.toMatchObject({
       data: {
-        updateToDo: todoListData
+        updateToDo: todoListData.filter(todo => todo.author.name === "Max")
       }
     });
   });
