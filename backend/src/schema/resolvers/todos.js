@@ -1,3 +1,5 @@
+const { decodedToken } = require("../../utils/decode");
+
 const { todoListData } = require("../../data");
 
 module.exports.TodoResolver = {
@@ -9,15 +11,20 @@ module.exports.TodoResolver = {
     }
   },
   Query: {
-    todos: () => todoListData
+    todos: (object, params) => {
+      const decoded = decodedToken(params.token);
+      return todoListData.filter(todo => todo.author.name === decoded.username);
+    }
   },
   Mutation: {
     delToDo: (object, params) => {
+      const decoded = decodedToken(params.token);
       let index = todoListData.findIndex(todoData => todoData.id === params.id);
       todoListData.splice(index, 1);
       return todoListData;
     },
     addToDo: (object, params) => {
+      const decoded = decodedToken(params.token);
       var maxid = 0;
       todoListData.map(obj => {
         if (obj.id > maxid) maxid = obj.id;
@@ -33,6 +40,7 @@ module.exports.TodoResolver = {
       return todoListData;
     },
     updateToDo: (object, params) => {
+      const decoded = decodedToken(params.token);
       let index = todoListData.findIndex(todoData => todoData.id === params.id);
       todoListData[index].text = params.text;
       todoListData[index].author.name = params.authorName;

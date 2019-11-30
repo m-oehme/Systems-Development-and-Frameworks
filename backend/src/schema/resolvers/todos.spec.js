@@ -1,4 +1,4 @@
-const { todoListData } = require("../../data");
+const { todoListData, userData } = require("../../data");
 
 const { gql } = require("apollo-server");
 const { createTestClient } = require("apollo-server-testing");
@@ -6,8 +6,8 @@ const { createTestClient } = require("apollo-server-testing");
 const { constructTestServer } = require("../../utils/__utils");
 
 const GET_TODOS = gql`
-  query {
-    todos {
+  query($token: String) {
+    todos(token: $token) {
       id
       text
       author {
@@ -18,8 +18,8 @@ const GET_TODOS = gql`
 `;
 
 const DEL_TODO = gql`
-  mutation delToDo($id: ID) {
-    delToDo(id: $id) {
+  mutation delToDo($id: ID, $token: String) {
+    delToDo(id: $id, token: $token) {
       id
       text
       author {
@@ -30,8 +30,8 @@ const DEL_TODO = gql`
 `;
 
 const ADD_TODO = gql`
-  mutation addToDo($text: String!, $authorName: String!) {
-    addToDo(text: $text, authorName: $authorName) {
+  mutation addToDo($text: String!, $authorName: String!, $token: String) {
+    addToDo(text: $text, authorName: $authorName, token: $token) {
       id
       text
       author {
@@ -42,8 +42,13 @@ const ADD_TODO = gql`
 `;
 
 const UPDATE_TODO = gql`
-  mutation updateToDo($id: ID!, $text: String!, $authorName: String!) {
-    updateToDo(id: $id, text: $text, authorName: $authorName) {
+  mutation updateToDo(
+    $id: ID!
+    $text: String!
+    $authorName: String!
+    $token: String
+  ) {
+    updateToDo(id: $id, text: $text, authorName: $authorName, token: $token) {
       id
       text
       author {
@@ -53,19 +58,44 @@ const UPDATE_TODO = gql`
   }
 `;
 
+const POST_LOGIN = gql`
+  mutation login($username: String) {
+    login(username: $username) {
+      username
+      isLoggedIn
+      token
+    }
+  }
+`;
+
 let query;
 let mutate;
+let token;
 
-beforeAll(() => {
+beforeAll(async () => {
   const { testServer } = constructTestServer();
   // use the test server to create a query function
   query = createTestClient(testServer).query;
   mutate = createTestClient(testServer).mutate;
+
+  let res = await mutate({
+    mutation: POST_LOGIN,
+    variables: {
+      username: userData[0].username
+    }
+  });
+  token = res.data.login.token;
 });
 
 describe("Querys", () => {
   it("receiving todolist response", async () => {
-    await expect(query({ query: GET_TODOS })).resolves.toMatchObject({
+    let res = await query({
+      query: GET_TODOS,
+      variables: {
+        token: token
+      }
+    });
+    expect(res).toMatchObject({
       data: {
         todos: todoListData
       }
@@ -94,7 +124,7 @@ describe("Mutations", () => {
 
   it("delete todo", async () => {
     await expect(
-      mutate({ mutation: DEL_TODO, variables: { id: 1 } })
+      mutate({ mutation: DEL_TODO, variables: { id: 1, token: token } })
     ).resolves.toMatchObject({
       data: {
         delToDo: todoListData
@@ -106,7 +136,11 @@ describe("Mutations", () => {
     await expect(
       mutate({
         mutation: ADD_TODO,
-        variables: { text: newtodo.text, authorName: newtodo.author.name }
+        variables: {
+          text: newtodo.text,
+          authorName: newtodo.author.name,
+          token: token
+        }
       })
     ).resolves.toMatchObject({
       data: {
@@ -122,7 +156,8 @@ describe("Mutations", () => {
         variables: {
           id: updatedTodo.id,
           text: updatedTodo.text,
-          authorName: updatedTodo.author.name
+          authorName: updatedTodo.author.name,
+          token: token
         }
       })
     ).resolves.toMatchObject({
