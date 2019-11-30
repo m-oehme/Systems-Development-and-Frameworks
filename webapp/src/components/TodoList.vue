@@ -2,19 +2,19 @@
   <div id="todo_list">
     <div id="todo_list_head">
       <div id="todo_list_title">Todo List</div>
-      <div v-if="!isEditingAuthor" class="head_right">
+      <div class="head_right">
         <button id="addTodo" class="bigGreen" @click="addEntry">
           Add New Todo
         </button>
         <div style="font-style: italic">
-          Current editor is {{ author.name }}
+          Current editor is {{ user.username }}
         </div>
-        <button class="smallGray" @click="editAuthor">Edit</button>
+        <!--        <button class="smallGray" @click="editAuthor">Edit</button>-->
       </div>
-      <div v-else class="head_right">
-        <button class="bigGreen" @click="saveAuthor">Save Author</button>
-        <input v-model="author.name" />
-      </div>
+      <!--      <div v-else class="head_right">-->
+      <!--        <button class="bigGreen" @click="saveAuthor">Save Author</button>-->
+      <!--        <input v-model="author.name" />-->
+      <!--      </div>-->
     </div>
     <ol>
       <TodoItem
@@ -37,6 +37,7 @@ import TodoItem from "./TodoItem";
 export default {
   name: "TodoList",
   components: { TodoItem },
+  props: ["user"],
   apollo: {
     todoListData: gql`
       query {
@@ -53,7 +54,6 @@ export default {
   data() {
     return {
       initialEditMode: false,
-      author: { name: "Max" },
       isEditingAuthor: false
     };
   },
@@ -66,7 +66,7 @@ export default {
       const newTodo = {
         message: "New Todo",
         author: {
-          name: this.author.name
+          name: this.user.username
         }
       };
       this.todoListData.push(newTodo);
