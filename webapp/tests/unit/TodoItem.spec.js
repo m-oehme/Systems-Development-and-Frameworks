@@ -22,9 +22,11 @@ describe("TodoItem", () => {
   });
 
   describe("click on edit button", () => {
-    it("does show input field", () => {
+    beforeAll(() => {
       wrapper.find("#edit").trigger("click");
+    });
 
+    it("does show input field", () => {
       expect(wrapper.contains("input")).toBe(true);
     });
 
