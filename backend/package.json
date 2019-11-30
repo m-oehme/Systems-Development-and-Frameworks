@@ -58,7 +58,8 @@
   "jest": {
     "testPathIgnorePatterns": [
       "/node_modules/",
-      "/tests/unit/__utils"
+      "/tests/unit/__utils",
+      "/dist/"
     ]
   }
 }

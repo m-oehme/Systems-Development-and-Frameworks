@@ -15,8 +15,8 @@ const POST_LOGIN = gql`
 `;
 
 const POST_SIGNUP = gql`
-  mutation sighup($username: String) {
-    sighup(username: $username) {
+  mutation signup($username: String) {
+    signup(username: $username) {
       username
       isLoggedIn
       token
@@ -59,7 +59,7 @@ describe("Mutations", () => {
         username: "Bob Ross"
       }
     });
-    expect(res.data.login.isLoggedIn).toBeTruthy();
+    expect(res.data.signup.isLoggedIn).toBeTruthy();
   });
 
   it("signup failed", async () => {
@@ -69,8 +69,6 @@ describe("Mutations", () => {
         username: userData[0].username
       }
     });
-    expect(res.error.message).toMatch(
-      "Username already taken! There can be only one!"
-    );
+    expect(res.data).toBeNull();
   });
 });

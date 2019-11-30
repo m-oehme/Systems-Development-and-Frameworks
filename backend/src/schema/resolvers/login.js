@@ -21,6 +21,26 @@ module.exports.LoginResolver = {
           isLoggedIn: false
         };
       }
+    },
+    signup: (object, params) => {
+      let user = userData.find(user => user.username === params.username);
+
+      if (user === undefined) {
+        let newUser = {
+          username: params.username
+        };
+        userData.push(newUser);
+
+        let token = jwt.sign(newUser, "supersecret");
+
+        return {
+          token: token,
+          username: newUser.username,
+          isLoggedIn: true
+        };
+      } else {
+        return null;
+      }
     }
   }
 };

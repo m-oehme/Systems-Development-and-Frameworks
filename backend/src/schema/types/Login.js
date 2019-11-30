@@ -8,7 +8,8 @@ module.exports.LoginType = gql`
   }
 
   type Mutation {
-    login(username: String): Login
+    login(username: String): Login!
+    signup(username: String): Login!
   }
 
   schema {
