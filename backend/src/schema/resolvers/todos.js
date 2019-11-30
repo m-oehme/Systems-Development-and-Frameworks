@@ -21,7 +21,7 @@ module.exports.TodoResolver = {
       const decoded = decodedToken(params.token);
       let index = todoListData.findIndex(todoData => todoData.id === params.id);
       todoListData.splice(index, 1);
-      return todoListData;
+      return todoListData.filter(todo => todo.author.name === decoded.username);
     },
     addToDo: (object, params) => {
       const decoded = decodedToken(params.token);
@@ -37,14 +37,14 @@ module.exports.TodoResolver = {
           name: params.authorName
         }
       });
-      return todoListData;
+      return todoListData.filter(todo => todo.author.name === decoded.username);
     },
     updateToDo: (object, params) => {
       const decoded = decodedToken(params.token);
       let index = todoListData.findIndex(todoData => todoData.id === params.id);
       todoListData[index].text = params.text;
       todoListData[index].author.name = params.authorName;
-      return todoListData;
+      return todoListData.filter(todo => todo.author.name === decoded.username);
     }
   }
 };

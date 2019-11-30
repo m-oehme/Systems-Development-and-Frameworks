@@ -39,17 +39,24 @@ export default {
   components: { TodoItem },
   props: ["user"],
   apollo: {
-    todoListData: gql`
-      query {
-        todoListData: todos {
-          id
-          text
-          author {
-            name
+    todoListData: {
+      query: gql`
+        query($token: String) {
+          todoListData: todos(token: $token) {
+            id
+            text
+            author {
+              name
+            }
           }
         }
+      `,
+      variables() {
+        return {
+          token: this.user.token
+        };
       }
-    `
+    }
   },
   data() {
     return {
@@ -75,8 +82,8 @@ export default {
       this.$apollo
         .mutate({
           mutation: gql`
-            mutation delToDo($id: ID) {
-              delToDo(id: $id) {
+            mutation delToDo($id: ID, $token: String) {
+              delToDo(id: $id, token: $token) {
                 id
                 text
                 author {
@@ -86,7 +93,8 @@ export default {
             }
           `,
           variables: {
-            id: todo.id
+            id: todo.id,
+            token: this.user.token
           }
         })
         .then(body => {
@@ -99,8 +107,12 @@ export default {
         this.$apollo
           .mutate({
             mutation: gql`
-              mutation addToDo($text: String!, $authorName: String!) {
-                addToDo(text: $text, authorName: $authorName) {
+              mutation addToDo(
+                $text: String!
+                $authorName: String!
+                $token: String
+              ) {
+                addToDo(text: $text, authorName: $authorName, token: $token) {
                   id
                   text
                   author {
@@ -111,7 +123,8 @@ export default {
             `,
             variables: {
               text: todo.text,
-              authorName: todo.author.name
+              authorName: this.user.username,
+              token: this.user.token
             }
           })
           .then(body => {
@@ -125,8 +138,14 @@ export default {
                 $id: ID!
                 $text: String!
                 $authorName: String!
+                $token: String
               ) {
-                updateToDo(id: $id, text: $text, authorName: $authorName) {
+                updateToDo(
+                  id: $id
+                  text: $text
+                  authorName: $authorName
+                  token: $token
+                ) {
                   id
                   text
                   author {
@@ -138,7 +157,8 @@ export default {
             variables: {
               id: todo.id,
               text: todo.text,
-              authorName: todo.author.name
+              authorName: this.user.username,
+              token: this.user.token
             }
           })
           .then(body => {
