@@ -7,7 +7,7 @@ const wrapper = shallowMount(TodoItem, {
       id: 1,
       text: "todo.text",
       author: {
-        name: "Max Mustermannnnnnn"
+        name: "Max"
       }
     }
   }
