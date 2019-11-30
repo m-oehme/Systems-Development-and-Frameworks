@@ -14,6 +14,16 @@ const POST_LOGIN = gql`
   }
 `;
 
+const POST_SIGNUP = gql`
+  mutation sighup($username: String) {
+    sighup(username: $username) {
+      username
+      isLoggedIn
+      token
+    }
+  }
+`;
+
 let mutate;
 
 beforeAll(() => {
@@ -36,9 +46,31 @@ describe("Mutations", () => {
     let res = await mutate({
       mutation: POST_LOGIN,
       variables: {
-        username: "Not A User"
+        username: "Not A Human connected!"
       }
     });
     expect(res.data.login.isLoggedIn).toBeFalsy();
+  });
+
+  it("signup successful", async () => {
+    let res = await mutate({
+      mutation: POST_SIGNUP,
+      variables: {
+        username: "Bob Ross"
+      }
+    });
+    expect(res.data.login.isLoggedIn).toBeTruthy();
+  });
+
+  it("signup failed", async () => {
+    let res = await mutate({
+      mutation: POST_SIGNUP,
+      variables: {
+        username: userData[0].username
+      }
+    });
+    expect(res.error.message).toMatch(
+      "Username already taken! There can be only one!"
+    );
   });
 });
