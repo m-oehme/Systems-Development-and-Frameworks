@@ -1,3 +1,5 @@
+const { AuthenticationError } = require("apollo-server-errors");
+
 const jwt = require("jsonwebtoken");
 
 const { userData } = require("../../data");
@@ -15,11 +17,7 @@ module.exports.LoginResolver = {
           isLoggedIn: true
         };
       } else {
-        return {
-          token: null,
-          username: null,
-          isLoggedIn: false
-        };
+        throw new AuthenticationError("There is no such user, you fool!");
       }
     },
     signup: (object, params) => {
@@ -39,7 +37,9 @@ module.exports.LoginResolver = {
           isLoggedIn: true
         };
       } else {
-        return null;
+        throw new AuthenticationError(
+          "Username already taken! There can be only one!"
+        );
       }
     }
   }

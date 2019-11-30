@@ -49,7 +49,10 @@ describe("Mutations", () => {
         username: "Not A Human connected!"
       }
     });
-    expect(res.data.login.isLoggedIn).toBeFalsy();
+    expect(res).toMatchObject({
+      data: null,
+      errors: [{ message: "There is no such user, you fool!" }]
+    });
   });
 
   it("signup successful", async () => {
@@ -69,6 +72,9 @@ describe("Mutations", () => {
         username: userData[0].username
       }
     });
-    expect(res.data).toBeNull();
+    expect(res).toMatchObject({
+      data: null,
+      errors: [{ message: "Username already taken! There can be only one!" }]
+    });
   });
 });
