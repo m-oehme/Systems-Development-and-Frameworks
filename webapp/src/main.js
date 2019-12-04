@@ -6,13 +6,20 @@ import VueApollo from "vue-apollo";
 Vue.use(VueApollo);
 Vue.config.productionTip = false;
 
-const apolloClient = new ApolloClient({
-  // You should use an absolute URL here
-  uri: "http://localhost:4000"
+const client = new ApolloClient({
+  uri: "http://localhost:4000",
+  request: operation => {
+    const token = localStorage.getItem("token");
+    operation.setContext({
+      headers: {
+        authorization: token ? `Bearer ${token}` : ""
+      }
+    });
+  }
 });
 
 const apolloProvider = new VueApollo({
-  defaultClient: apolloClient
+  defaultClient: client
 });
 
 new Vue({

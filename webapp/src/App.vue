@@ -18,7 +18,7 @@ import TodoList from "./components/TodoList";
 import Login from "./components/Login";
 
 export default {
-  name: "app",
+  name: "App",
   components: {
     Login,
     TodoList
@@ -40,6 +40,7 @@ export default {
   methods: {
     setUser(user) {
       this.user = user;
+      localStorage.setItem("token", user.token);
     }
   }
 };

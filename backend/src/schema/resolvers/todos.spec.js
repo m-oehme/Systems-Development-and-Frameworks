@@ -6,8 +6,8 @@ const { createTestClient } = require("apollo-server-testing");
 const { constructTestServer } = require("../../utils/__utils");
 
 const GET_TODOS = gql`
-  query($token: String) {
-    todos(token: $token) {
+  query {
+    todos {
       id
       text
       author {
@@ -18,8 +18,8 @@ const GET_TODOS = gql`
 `;
 
 const DEL_TODO = gql`
-  mutation delToDo($id: ID, $token: String) {
-    delToDo(id: $id, token: $token) {
+  mutation delToDo($id: ID) {
+    delToDo(id: $id) {
       id
       text
       author {
@@ -30,8 +30,8 @@ const DEL_TODO = gql`
 `;
 
 const ADD_TODO = gql`
-  mutation addToDo($text: String!, $authorName: String!, $token: String) {
-    addToDo(text: $text, authorName: $authorName, token: $token) {
+  mutation addToDo($text: String!, $authorName: String!) {
+    addToDo(text: $text, authorName: $authorName) {
       id
       text
       author {
@@ -42,13 +42,8 @@ const ADD_TODO = gql`
 `;
 
 const UPDATE_TODO = gql`
-  mutation updateToDo(
-    $id: ID!
-    $text: String!
-    $authorName: String!
-    $token: String
-  ) {
-    updateToDo(id: $id, text: $text, authorName: $authorName, token: $token) {
+  mutation updateToDo($id: ID!, $text: String!, $authorName: String!) {
+    updateToDo(id: $id, text: $text, authorName: $authorName) {
       id
       text
       author {
@@ -74,6 +69,14 @@ let token;
 
 beforeAll(async () => {
   const { testServer } = constructTestServer();
+  testServer.requestOptions = {
+    context() {
+      return {
+        token: token
+      };
+    }
+  };
+
   // use the test server to create a query function
   query = createTestClient(testServer).query;
   mutate = createTestClient(testServer).mutate;
@@ -90,10 +93,7 @@ beforeAll(async () => {
 describe("Querys", () => {
   it("receiving todolist response", async () => {
     let res = await query({
-      query: GET_TODOS,
-      variables: {
-        token: token
-      }
+      query: GET_TODOS
     });
     expect(res).toMatchObject({
       data: {
@@ -142,8 +142,7 @@ describe("Mutations", () => {
         mutation: ADD_TODO,
         variables: {
           text: newtodo.text,
-          authorName: newtodo.author.name,
-          token: token
+          authorName: newtodo.author.name
         }
       })
     ).resolves.toMatchObject({
@@ -160,8 +159,7 @@ describe("Mutations", () => {
         variables: {
           id: updatedTodo.id,
           text: updatedTodo.text,
-          authorName: updatedTodo.author.name,
-          token: token
+          authorName: updatedTodo.author.name
         }
       })
     ).resolves.toMatchObject({

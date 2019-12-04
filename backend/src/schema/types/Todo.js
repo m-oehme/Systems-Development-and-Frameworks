@@ -8,18 +8,13 @@ module.exports.TodoType = gql`
   }
 
   type Query {
-    todos(token: String): [Todo]
+    todos: [Todo]
   }
 
   type Mutation {
-    delToDo(id: ID, token: String): [Todo]
-    addToDo(text: String!, authorName: String!, token: String): [Todo]
-    updateToDo(
-      id: ID!
-      text: String!
-      authorName: String!
-      token: String
-    ): [Todo]
+    delToDo(id: ID): [Todo]
+    addToDo(text: String!, authorName: String!): [Todo]
+    updateToDo(id: ID!, text: String!, authorName: String!): [Todo]
   }
 
   schema {

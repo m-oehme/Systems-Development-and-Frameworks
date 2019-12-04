@@ -11,20 +11,20 @@ module.exports.TodoResolver = {
     }
   },
   Query: {
-    todos: (object, params) => {
-      const decoded = decodedToken(params.token);
+    todos: (object, params, context) => {
+      const decoded = decodedToken(context.token);
       return todoListData.filter(todo => todo.author.name === decoded.username);
     }
   },
   Mutation: {
-    delToDo: (object, params) => {
-      const decoded = decodedToken(params.token);
+    delToDo: (object, params, context) => {
+      const decoded = decodedToken(context.token);
       let index = todoListData.findIndex(todoData => todoData.id === params.id);
       todoListData.splice(index, 1);
       return todoListData.filter(todo => todo.author.name === decoded.username);
     },
-    addToDo: (object, params) => {
-      const decoded = decodedToken(params.token);
+    addToDo: (object, params, context) => {
+      const decoded = decodedToken(context.token);
       var maxid = 0;
       todoListData.map(obj => {
         if (obj.id > maxid) maxid = obj.id;
@@ -39,8 +39,8 @@ module.exports.TodoResolver = {
       });
       return todoListData.filter(todo => todo.author.name === decoded.username);
     },
-    updateToDo: (object, params) => {
-      const decoded = decodedToken(params.token);
+    updateToDo: (object, params, context) => {
+      const decoded = decodedToken(context.token);
       let index = todoListData.findIndex(todoData => todoData.id === params.id);
       todoListData[index].text = params.text;
       todoListData[index].author.name = params.authorName;
