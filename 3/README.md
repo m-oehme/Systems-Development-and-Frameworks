@@ -10,8 +10,8 @@ Test-drive the development of a GraphQL server.
 2. :heavy_check_mark: Test your backend with [apollo-server-testing](https://www.apollographql.com/docs/apollo-server/testing/testing/).
 3. :heavy_check_mark: Implement [JWT](https://jwt.io/) and have at least one query which requires authentication.
 4. :heavy_check_mark: Add backend testing to your build server pipeline.
-5. :x: Request a review from @roschaefer
-6. :x: Request a review from sb. else
+5. :heavy_check_mark: Request a review from @roschaefer
+6. :heavy_check_mark: Request a review from sb. else
 
 Note that it is **not required** that you connect your frontend with your
 backend.
