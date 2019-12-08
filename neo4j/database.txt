@@ -1,0 +1,38 @@
+CREATE( max:User { 
+    name:'Max'
+    })
+
+
+CREATE(
+    vic:User {
+        name:'Victor'
+    })
+
+
+CREATE(
+    todo1:Todo {
+        id: 1,
+        text: 'Foo'
+    })
+
+
+CREATE(
+    todo2:Todo {
+        id: 2,
+        text: 'Bar'
+    })
+
+
+CREATE( 
+    todo3:Todo {
+        id: 3,
+        text: 'Baz'
+    })
+
+CREATE
+(max)-[:ASSIGNED]->(todo1),
+(max)-[:ASSIGNED]->(todo3),
+(vic)-[:ASSIGNED]->(todo2)
+
+
+

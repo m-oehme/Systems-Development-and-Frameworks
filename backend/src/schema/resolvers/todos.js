@@ -2,19 +2,24 @@ const { decodedToken } = require("../../utils/decode");
 
 const { todoListData } = require("../../data");
 
+const { neo4jgraphql } = require("neo4j-graphql-js");
+
 module.exports.TodoResolver = {
   Todo: {
-    author(todo) {
-      return todoListData.find(value => {
-        return todo.id === value.id;
-      }).author;
+    author(object, params, ctx, resolveInfo) {
+      return neo4jgraphql(object, params, ctx, resolveInfo);
     }
   },
   Query: {
-    todos: (object, params, context) => {
-      const decoded = decodedToken(context.token);
-      return todoListData.filter(todo => todo.author.name === decoded.username);
+    todos(object, params, ctx, resolveInfo) {
+      const decoded = decodedToken(ctx.token);
+      return neo4jgraphql(object, params, ctx, resolveInfo);
     }
+    // TODO: FILTER MUSS NOCH IMPLEMETIERT WERDEN
+    // todos: (object, params, context) => {
+    //   const decoded = decodedToken(context.token);
+    //   return todoListData.filter(todo => todo.author.name === decoded.username);
+    // }
   },
   Mutation: {
     delToDo: (object, params, context) => {

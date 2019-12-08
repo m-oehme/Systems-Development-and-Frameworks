@@ -4,7 +4,7 @@ const { mergeTypes, mergeResolvers } = require("merge-graphql-schemas");
  * Add to the list.
  *  */
 const { TodoType } = require("./types/Todo");
-const { AuthorType } = require("./types/Author");
+const { AuthorType } = require("./types/User");
 const { HelloWorldType } = require("./types/HelloWorld");
 const { LoginType } = require("./types/Login");
 
