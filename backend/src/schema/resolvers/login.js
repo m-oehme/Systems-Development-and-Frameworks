@@ -40,26 +40,38 @@ module.exports.LoginResolver = {
         await session.close()
       }
     },
-    signup: (object, params) => {
-      let user = userData.find(user => user.username === params.username);
+    signup: async (object, params, ctx, resolveInfo) => {
+      
+      const session = ctx.driver.session()
+      try {
+        const result = await session.run(
+          'MERGE (max:User {name:$username}) return max as user',
+          {
+            username: params.username
+          }
+        )
+        const [user] = await result.records.map(record => {
+          return record.get('user').properties
+        })
 
-      if (user === undefined) {
-        let newUser = {
-          username: params.username
-        };
-        userData.push(newUser);
-
-        let token = jwt.sign(newUser, "supersecret");
-
-        return {
-          token: token,
-          username: newUser.username,
-          isLoggedIn: true
-        };
-      } else {
-        throw new AuthenticationError(
-          "Username already taken! There can be only one!"
-        );
+        if (user !== undefined) {
+          let token = jwt.sign(user, "supersecret");
+          return {
+            token: token,
+            username: user.name,
+            isLoggedIn: true
+          };
+        } else {
+          throw new AuthenticationError(
+            "Username already taken! There can be only one!"
+          );
+        }
+      } catch (error) {
+        console.log(error)
+        // await session.rollback()
+        // console.log('rolled back')
+      } finally {
+        await session.close()
       }
     }
   }
