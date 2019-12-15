@@ -191,7 +191,7 @@ describe("Mutations", () => {
     const list = todoListData.filter(todo => todo.author.name === "Max");
     list.splice(0, 1);
     await expect(
-      mutate({ mutation: DEL_TODO, variables: { id: 1, token: token } })
+      mutate({ mutation: DEL_TODO, variables: { id: 1 } })
     ).resolves.toMatchObject({
       data: {
         delToDo: list

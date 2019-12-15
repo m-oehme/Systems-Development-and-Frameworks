@@ -22,7 +22,7 @@ module.exports.LoginResolver = {
         });
 
         if (user !== undefined) {
-          let token = jwt.sign(user, "supersecret");
+          let token = jwt.sign(user.name, "supersecret");
           return {
             token: token,
             username: user.name,
@@ -49,7 +49,7 @@ module.exports.LoginResolver = {
         });
 
         if (user !== undefined) {
-          let token = jwt.sign(user, "supersecret");
+          let token = jwt.sign(user.name, "supersecret");
           return {
             token: token,
             username: user.name,
