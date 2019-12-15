@@ -2,13 +2,9 @@ const { AuthenticationError } = require("apollo-server-errors");
 
 const jwt = require("jsonwebtoken");
 
-const { userData } = require("../../data");
-
-const { neo4jgraphql } = require("neo4j-graphql-js");
-
 module.exports.LoginResolver = {
   Mutation: {
-    login: async (object, params, ctx, resolveInfo) => {
+    login: async (object, params, ctx) => {
       const session = ctx.driver.session();
       try {
         const result = await session.run(
@@ -35,7 +31,7 @@ module.exports.LoginResolver = {
         await session.close();
       }
     },
-    signup: async (object, params, ctx, resolveInfo) => {
+    signup: async (object, params, ctx) => {
       const session = ctx.driver.session();
       try {
         const result = await session.run(

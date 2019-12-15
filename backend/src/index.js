@@ -1,10 +1,10 @@
 const { ApolloServer } = require("apollo-server");
 const { typeDefs, resolvers } = require("./schema");
-const { makeAugmentedSchema } = require('neo4j-graphql-js');
-const { v1 } = require('neo4j-driver');
+const { makeAugmentedSchema } = require("neo4j-graphql-js");
+const { v1 } = require("neo4j-driver");
 const driver = v1.driver(
-  'bolt://localhost:7687',
-  v1.auth.basic('neo4j', 'password')
+  "bolt://localhost:7687",
+  v1.auth.basic("neo4j", "password")
 );
 
 const schema = makeAugmentedSchema({ typeDefs, resolvers });

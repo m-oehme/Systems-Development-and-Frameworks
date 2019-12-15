@@ -17,13 +17,13 @@ module.exports.TodoResolver = {
     }
   },
   Mutation: {
-    delToDo: async (object, params, ctx, resolveInfo) => {
+    delToDo: async (object, params, ctx) => {
       const decoded = decodedToken(ctx.token);
       let index = todoListData.findIndex(todoData => todoData.id === params.id);
       todoListData.splice(index, 1);
       return todoListData.filter(todo => todo.author.name === decoded);
     },
-    addToDo: (object, params, ctx, resolveInfo) => {
+    addToDo: (object, params, ctx) => {
       const decoded = decodedToken(ctx.token);
 
       var maxid = 0;
@@ -40,7 +40,7 @@ module.exports.TodoResolver = {
       });
       return todoListData.filter(todo => todo.author.name === decoded);
     },
-    updateToDo: (object, params, ctx, resolveInfo) => {
+    updateToDo: (object, params, ctx) => {
       const decoded = decodedToken(ctx.token);
 
       let index = todoListData.findIndex(todoData => todoData.id === params.id);
