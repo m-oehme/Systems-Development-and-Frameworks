@@ -8,18 +8,40 @@ module.exports.TodoResolver = {
   Query: {
     todos(object, params, ctx, resolveInfo) {
       const decoded = decodedToken(ctx.token);
+      params = {
+        filter: {
+          author: {
+            name: decoded.name
+          }
+        }
+      };
       return neo4jgraphql(object, params, ctx, resolveInfo);
     }
   },
   Mutation: {
-    delToDo: (object, params, context) => {
-      const decoded = decodedToken(context.token);
+    delToDo: (object, params, ctx, resolveInfo) => {
+      const decoded = decodedToken(ctx.token);
+      params = {
+        filter: {
+          author: {
+            name: decoded.name
+          }
+        }
+      };
       let index = todoListData.findIndex(todoData => todoData.id === params.id);
       todoListData.splice(index, 1);
-      return todoListData.filter(todo => todo.author.name === decoded.username);
+      return todoListData;
     },
-    addToDo: (object, params, context) => {
-      const decoded = decodedToken(context.token);
+    addToDo: (object, params, ctx, resolveInfo) => {
+      const decoded = decodedToken(ctx.token);
+      params = {
+        filter: {
+          author: {
+            name: decoded.name
+          }
+        }
+      };
+
       var maxid = 0;
       todoListData.map(obj => {
         if (obj.id > maxid) maxid = obj.id;
@@ -34,8 +56,16 @@ module.exports.TodoResolver = {
       });
       return todoListData.filter(todo => todo.author.name === decoded.username);
     },
-    updateToDo: (object, params, context) => {
-      const decoded = decodedToken(context.token);
+    updateToDo: (object, params, ctx, resolveInfo) => {
+      const decoded = decodedToken(ctx.token);
+      params = {
+        filter: {
+          author: {
+            name: decoded.name
+          }
+        }
+      };
+
       let index = todoListData.findIndex(todoData => todoData.id === params.id);
       todoListData[index].text = params.text;
       todoListData[index].author.name = params.authorName;

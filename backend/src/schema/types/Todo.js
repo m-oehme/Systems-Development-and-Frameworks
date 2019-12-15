@@ -8,7 +8,7 @@ module.exports.TodoType = gql`
   }
 
   type Query {
-    todos(orderBy:[_TodoOrdering] = asc): [Todo]
+    todos: [Todo]
   }
 
   type Mutation {
@@ -16,5 +16,4 @@ module.exports.TodoType = gql`
     addToDo(text: String!, authorName: String!): [Todo]
     updateToDo(id: ID!, text: String!, authorName: String!): [Todo]
   }
-  
 `;
