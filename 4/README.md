@@ -25,8 +25,8 @@ Connect your database with Neo4J
    }
    ```
 4. :heavy_check_mark: Implement a filter (`WHERE` in cypher).
-5. :x: Implement some ordering (`ORDER BY` in cypher).
-6. :x: Implement pagination (`FIRST` and `LIMIT` in cypher).
+5. :heavy_check_mark: Implement some ordering (`ORDER BY` in cypher).
+6. :heavy_check_mark: Implement pagination (`FIRST` and `LIMIT` in cypher).
 7. :heavy_check_mark: Implement an update mutation that uses `MERGE`.
 8. :x: Write backend tests for all of the above.
 9. :x: Request a review from @roschaefer.

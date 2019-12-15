@@ -2,12 +2,37 @@ const { todoListData, userData } = require("../../data");
 
 const { gql } = require("apollo-server");
 const { createTestClient } = require("apollo-server-testing");
+const { v1 } = require("neo4j-driver");
 
 const { constructTestServer } = require("../../utils/__utils");
 
 const GET_TODOS = gql`
   query {
     todos {
+      id
+      text
+      author {
+        name
+      }
+    }
+  }
+`;
+
+const GET_TODOS_PAGED = gql`
+  query {
+    todos(first: 1, offset: 1) {
+      id
+      text
+      author {
+        name
+      }
+    }
+  }
+`;
+
+const GET_TODOS_ORDERED = gql`
+  query {
+    todos(orderBy: text_asc) {
       id
       text
       author {
@@ -68,11 +93,17 @@ let mutate;
 let token;
 
 beforeAll(async () => {
+  const driver = v1.driver(
+    "bolt://localhost:7687",
+    v1.auth.basic("neo4j", "password")
+  );
+
   const { testServer } = constructTestServer();
   testServer.requestOptions = {
     context() {
       return {
-        token: token
+        token: token,
+        driver
       };
     }
   };
@@ -98,6 +129,40 @@ describe("Querys", () => {
     expect(res).toMatchObject({
       data: {
         todos: todoListData.filter(todo => todo.author.name === "Max")
+      }
+    });
+  });
+
+  it("receiving orderes todolist response", async () => {
+    let res = await query({
+      query: GET_TODOS_ORDERED
+    });
+    expect(res).toMatchObject({
+      data: {
+        todos: todoListData
+          .filter(todo => todo.author.name === "Max")
+          .sort((a, b) => {
+            if (a.text < b.text) {
+              return -1;
+            }
+            if (a.text > b.text) {
+              return 1;
+            }
+            return 0;
+          })
+      }
+    });
+  });
+
+  it("receiving todos between 1 and 2", async () => {
+    let res = await query({
+      query: GET_TODOS_PAGED
+    });
+    expect(res).toMatchObject({
+      data: {
+        todos: todoListData
+          .filter(todo => todo.author.name === "Max")
+          .slice(1, 2)
       }
     });
   });
