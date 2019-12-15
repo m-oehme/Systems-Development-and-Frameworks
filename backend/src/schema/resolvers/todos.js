@@ -8,18 +8,16 @@ module.exports.TodoResolver = {
   Query: {
     todos(object, params, ctx, resolveInfo) {
       const decoded = decodedToken(ctx.token);
-      params = {
-        filter: {
-          author: {
-            name: decoded.name
-          }
+      params.filter = {
+        author: {
+          name: decoded.name
         }
       };
       return neo4jgraphql(object, params, ctx, resolveInfo);
     }
   },
   Mutation: {
-    delToDo: (object, params, ctx, resolveInfo) => {
+    delToDo: async (object, params, ctx, resolveInfo) => {
       const decoded = decodedToken(ctx.token);
       params = {
         filter: {

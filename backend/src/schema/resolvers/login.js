@@ -9,18 +9,17 @@ const { neo4jgraphql } = require("neo4j-graphql-js");
 module.exports.LoginResolver = {
   Mutation: {
     login: async (object, params, ctx, resolveInfo) => {
-
-      const session = ctx.driver.session()
+      const session = ctx.driver.session();
       try {
         const result = await session.run(
-          'MATCH (max:User) WHERE max.name = $username return max as user',
+          "MATCH (max:User) WHERE max.name = $username return max as user",
           {
             username: params.username
           }
-        )
+        );
         const [user] = await result.records.map(record => {
-          return record.get('user').properties
-        })
+          return record.get("user").properties;
+        });
 
         if (user !== undefined) {
           let token = jwt.sign(user, "supersecret");
@@ -32,27 +31,22 @@ module.exports.LoginResolver = {
         } else {
           throw new AuthenticationError("There is no such user, you fool!");
         }
-      } catch (error) {
-        console.log(error)
-        // await session.rollback()
-        // console.log('rolled back')
       } finally {
-        await session.close()
+        await session.close();
       }
     },
     signup: async (object, params, ctx, resolveInfo) => {
-      
-      const session = ctx.driver.session()
+      const session = ctx.driver.session();
       try {
         const result = await session.run(
-          'MERGE (max:User {name:$username}) return max as user',
+          "MERGE (max:User {name:$username}) return max as user",
           {
             username: params.username
           }
-        )
+        );
         const [user] = await result.records.map(record => {
-          return record.get('user').properties
-        })
+          return record.get("user").properties;
+        });
 
         if (user !== undefined) {
           let token = jwt.sign(user, "supersecret");
@@ -66,12 +60,8 @@ module.exports.LoginResolver = {
             "Username already taken! There can be only one!"
           );
         }
-      } catch (error) {
-        console.log(error)
-        // await session.rollback()
-        // console.log('rolled back')
       } finally {
-        await session.close()
+        await session.close();
       }
     }
   }

@@ -2,6 +2,7 @@ const { userData } = require("../../data");
 
 const { gql } = require("apollo-server");
 const { createTestClient } = require("apollo-server-testing");
+const { v1 } = require("neo4j-driver");
 
 const { constructTestServer } = require("../../utils/__utils");
 
@@ -27,7 +28,19 @@ const POST_SIGNUP = gql`
 let mutate;
 
 beforeAll(() => {
+  const driver = v1.driver(
+    "bolt://localhost:7687",
+    v1.auth.basic("neo4j", "password")
+  );
+
   const { testServer } = constructTestServer();
+  testServer.requestOptions = {
+    context() {
+      return {
+        driver
+      };
+    }
+  };
   mutate = createTestClient(testServer).mutate;
 });
 
@@ -65,16 +78,13 @@ describe("Mutations", () => {
     expect(res.data.signup.isLoggedIn).toBeTruthy();
   });
 
-  it("signup failed", async () => {
+  it("signup existing user", async () => {
     let res = await mutate({
       mutation: POST_SIGNUP,
       variables: {
         username: userData[0].username
       }
     });
-    expect(res).toMatchObject({
-      data: null,
-      errors: [{ message: "Username already taken! There can be only one!" }]
-    });
+    expect(res.data.signup.token).not.toBeNull();
   });
 });

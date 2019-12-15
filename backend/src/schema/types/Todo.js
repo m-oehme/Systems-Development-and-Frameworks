@@ -16,4 +16,9 @@ module.exports.TodoType = gql`
     addToDo(text: String!, authorName: String!): [Todo]
     updateToDo(id: ID!, text: String!, authorName: String!): [Todo]
   }
+
+  schema {
+    query: Query
+    mutation: Mutation
+  }
 `;
