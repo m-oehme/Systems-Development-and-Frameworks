@@ -1,20 +1,24 @@
 // const { HttpLink } = require('apollo-link-http');
 // const fetch = require('node-fetch');
+const { permissions } = require("../rules");
+
 const { ApolloServer } = require("apollo-server");
 const { HttpLink, execute, toPromise } = require("apollo-server-testing");
 const { makeAugmentedSchema } = require("neo4j-graphql-js");
+const { applyMiddleware } = require("graphql-middleware");
 
 module.exports.toPromise = toPromise;
 
 const { typeDefs, resolvers } = require("../schema");
 const schema = makeAugmentedSchema({ typeDefs, resolvers });
 
+const middleware = applyMiddleware(schema, permissions);
 /**
  * Integration testing utils
  */
 const constructTestServer = () => {
   const testServer = new ApolloServer({
-    schema
+    schema: middleware
   });
 
   return { testServer };
