@@ -1,3 +1,5 @@
+const { neo4jConfigs } = require("../../utils/config");
+
 const { userData } = require("../../data");
 
 const { gql } = require("apollo-server");
@@ -30,7 +32,7 @@ let mutate;
 beforeAll(() => {
   const driver = v1.driver(
     "bolt://localhost:7687",
-    v1.auth.basic("neo4j", "password")
+    v1.auth.basic(neo4jConfigs.NEO4J_USERNAME, neo4jConfigs.NEO4J_PASSWORD)
   );
 
   const { testServer } = constructTestServer();
