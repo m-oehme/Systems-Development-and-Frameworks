@@ -17,7 +17,7 @@ install:
   - cd webapp && npm install && cd ..
   - cd backend && npm install && cd ..
 before_script:
-  - cd backend && npm run seed
+  - npm run backend:seed
 script:
   - npm run web:lint
   - npm run web:test
