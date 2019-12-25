@@ -1,3 +1,5 @@
+const { NEO4J_USERNAME, NEO4J_PASSWORD } = require("../../utils/config");
+
 const { todoListData, userData } = require("../../data");
 
 const { gql } = require("apollo-server");
@@ -89,14 +91,15 @@ const POST_LOGIN = gql`
   }
 `;
 
+let driver;
 let query;
 let mutate;
 let token;
 
 beforeAll(async () => {
-  const driver = v1.driver(
+  driver = v1.driver(
     "bolt://localhost:7687",
-    v1.auth.basic("neo4j", "password")
+    v1.auth.basic(NEO4J_USERNAME, NEO4J_PASSWORD)
   );
 
   const { testServer } = constructTestServer();
@@ -112,6 +115,9 @@ beforeAll(async () => {
   // use the test server to create a query function
   query = createTestClient(testServer).query;
   mutate = createTestClient(testServer).mutate;
+});
+afterAll(async () => {
+  await driver.close();
 });
 describe("Authentication Failed", () => {
   beforeAll(async () => {
