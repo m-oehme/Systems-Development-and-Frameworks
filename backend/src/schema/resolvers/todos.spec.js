@@ -90,12 +90,13 @@ const POST_LOGIN = gql`
   }
 `;
 
+let driver;
 let query;
 let mutate;
 let token;
 
 beforeAll(async () => {
-  const driver = v1.driver(
+  driver = v1.driver(
     "bolt://localhost:7687",
     v1.auth.basic(NEO4J_USERNAME, NEO4J_PASSWORD)
   );
@@ -235,4 +236,8 @@ describe("Mutations", () => {
       }
     });
   });
+});
+
+afterAll(() => {
+  driver.close();
 });
