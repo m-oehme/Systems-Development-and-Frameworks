@@ -27,10 +27,11 @@ const POST_SIGNUP = gql`
   }
 `;
 
+let driver;
 let mutate;
 
 beforeAll(() => {
-  const driver = v1.driver(
+  driver = v1.driver(
     "bolt://localhost:7687",
     v1.auth.basic(NEO4J_USERNAME, NEO4J_PASSWORD)
   );
@@ -44,6 +45,10 @@ beforeAll(() => {
     }
   };
   mutate = createTestClient(testServer).mutate;
+});
+
+afterAll(async () => {
+  await driver.close();
 });
 
 describe("Mutations", () => {

@@ -124,6 +124,10 @@ beforeAll(async () => {
   token = res.data.login.token;
 });
 
+afterAll(async () => {
+  await driver.close();
+});
+
 describe("Querys", () => {
   it("receiving todolist response", async () => {
     let res = await query({
@@ -236,8 +240,4 @@ describe("Mutations", () => {
       }
     });
   });
-});
-
-afterAll(() => {
-  driver.close();
 });
