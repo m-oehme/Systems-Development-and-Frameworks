@@ -7,6 +7,9 @@ cache:
     - backend/node_modules
 services:
   - neo4j
+env:
+  - NEO4J_USERNAME=neo4j
+  - NEO4J_PASSWORD=neo4j
 install:
   - npm install
   - cd webapp && npm install && cd ..

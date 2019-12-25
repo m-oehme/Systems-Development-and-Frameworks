@@ -1,4 +1,4 @@
-const { neo4jConfigs } = require("../../utils/config");
+const { NEO4J_USERNAME, NEO4J_PASSWORD } = require("../../utils/config");
 
 const { userData } = require("../../data");
 
@@ -32,7 +32,7 @@ let mutate;
 beforeAll(() => {
   const driver = v1.driver(
     "bolt://localhost:7687",
-    v1.auth.basic(neo4jConfigs.NEO4J_USERNAME, neo4jConfigs.NEO4J_PASSWORD)
+    v1.auth.basic(NEO4J_USERNAME, NEO4J_PASSWORD)
   );
 
   const { testServer } = constructTestServer();
