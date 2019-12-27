@@ -1,9 +1,8 @@
-const { todoListData } = require("../../data");
+import { gql } from "apollo-server";
+import { createTestClient } from "apollo-server-testing";
+import { constructTestServer } from "../../utils/__utils";
 
-const { gql } = require("apollo-server");
-const { createTestClient } = require("apollo-server-testing");
-
-const { constructTestServer } = require("../../utils/__utils");
+import { todoListData } from "../../data";
 
 const GET_TODOS = gql`
   query {

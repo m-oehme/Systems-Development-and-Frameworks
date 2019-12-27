@@ -1,8 +1,6 @@
-const hello = "I am coming from the Backend to kill you! NOT";
+export const hello = "I am coming from the Backend to kill you! NOT";
 
-module.exports.hello = hello;
-
-module.exports.todoListData = [
+export const todoListData = [
   {
     id: "1",
     text: "Foo",
@@ -20,9 +18,7 @@ module.exports.todoListData = [
   }
 ];
 
-// module.exports.todoListData = todoListData;
-
-module.exports.userData = [
+export const userData = [
   {
     username: "Max"
   },

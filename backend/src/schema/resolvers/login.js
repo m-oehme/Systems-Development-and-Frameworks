@@ -1,10 +1,9 @@
 const { AuthenticationError } = require("apollo-server-errors");
-
 const jwt = require("jsonwebtoken");
 
-const { userData } = require("../../data");
+import { userData } from "../../data";
 
-module.exports.LoginResolver = {
+export const LoginResolver = {
   Mutation: {
     login: (object, params) => {
       let user = userData.find(user => user.username === params.username);

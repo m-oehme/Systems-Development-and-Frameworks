@@ -1,7 +1,6 @@
-const { gql } = require("apollo-server");
-const { createTestClient } = require("apollo-server-testing");
-
-const { constructTestServer } = require("../../utils/__utils");
+import { gql } from "apollo-server";
+import { createTestClient } from "apollo-server-testing";
+import { constructTestServer } from "../../utils/__utils";
 
 const POST_LOGIN = gql`
   mutation login($username: String) {

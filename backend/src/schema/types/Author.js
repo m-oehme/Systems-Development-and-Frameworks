@@ -1,6 +1,6 @@
-const { gql } = require("apollo-server");
+import { gql } from "apollo-server";
 
-module.exports.AuthorType = gql`
+export const AuthorType = gql`
   type Author {
     name: String
   }

@@ -1,6 +1,6 @@
-const { gql } = require("apollo-server");
+import { gql } from "apollo-server";
 
-module.exports.TodoType = gql`
+export const TodoType = gql`
   type Todo {
     id: ID
     text: String

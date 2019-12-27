@@ -1,9 +1,7 @@
-const { hello } = require("../../data");
-
-const { gql } = require("apollo-server");
-const { createTestClient } = require("apollo-server-testing");
-
-const { constructTestServer } = require("../../utils/__utils");
+import { gql } from "apollo-server";
+import { createTestClient } from "apollo-server-testing";
+import { constructTestServer } from "../../utils/__utils";
+import { hello } from "../../data";
 
 const GET_HELLO = gql`
   query {

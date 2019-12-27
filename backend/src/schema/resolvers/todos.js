@@ -1,8 +1,7 @@
-const { decodedToken } = require("../../utils/decode");
+import { decodedToken } from "../../utils/decode";
+import { todoListData } from "../../data";
 
-const { todoListData } = require("../../data");
-
-module.exports.TodoResolver = {
+export const TodoResolver = {
   Todo: {
     author(todo) {
       return todoListData.find(value => {

@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const decodedToken = (token, requireAuth = true) => {
+export const decodedToken = (token, requireAuth = true) => {
   // const header = req.req.headers.authorization;
 
   if (token) {
@@ -12,4 +12,3 @@ const decodedToken = (token, requireAuth = true) => {
   }
   return null;
 };
-module.exports = { decodedToken };
