@@ -1,5 +1,3 @@
-const { userData } = require("../../data");
-
 const { gql } = require("apollo-server");
 const { createTestClient } = require("apollo-server-testing");
 
@@ -32,49 +30,58 @@ beforeAll(() => {
 });
 
 describe("Mutations", () => {
-  it("receiving token on login", async () => {
-    let res = await mutate({
-      mutation: POST_LOGIN,
-      variables: {
-        username: userData[0].username
-      }
-    });
-    expect(res.data.login.isLoggedIn).toBeTruthy();
-  });
-
-  it("error wrong username", async () => {
-    let res = await mutate({
-      mutation: POST_LOGIN,
-      variables: {
-        username: "Not A Human connected!"
-      }
-    });
-    expect(res).toMatchObject({
-      data: null,
-      errors: [{ message: "There is no such user, you fool!" }]
+  describe("given valid login credentials", () => {
+    it("responds with token", async () => {
+      let res = await mutate({
+        mutation: POST_LOGIN,
+        variables: {
+          username: "Max"
+        }
+      });
+      expect(res.data.login.token).toStrictEqual(expect.any(String));
     });
   });
 
-  it("signup successful", async () => {
-    let res = await mutate({
-      mutation: POST_SIGNUP,
-      variables: {
-        username: "Bob Ross"
-      }
+  describe("given falsy login credentials", () => {
+    it("throws AuthenticationError Login Failed", async () => {
+      await expect(
+        mutate({
+          mutation: POST_LOGIN,
+          variables: {
+            username: "Not A Human connected!"
+          }
+        })
+      ).resolves.toMatchObject({
+        data: null,
+        errors: [{ message: "There is no such user, you fool!" }]
+      });
     });
-    expect(res.data.signup.isLoggedIn).toBeTruthy();
   });
 
-  it("signup failed", async () => {
-    let res = await mutate({
-      mutation: POST_SIGNUP,
-      variables: {
-        username: userData[0].username
-      }
+  describe("given username that is NOT taken", () => {
+    it("creates a new user in the database and responds with a token", async () => {
+      let res = await mutate({
+        mutation: POST_SIGNUP,
+        variables: {
+          username: "Bob Ross"
+        }
+      });
+      expect(res.data.signup.token).toStrictEqual(expect.any(String));
     });
-    expect(res).toMatchObject({
-      data: null,
-      errors: [{ message: "Username already taken! There can be only one!" }]
+  });
+
+  describe("user exists in database already", () => {
+    it("throw AuthenticationError SignUp failed", async () => {
+      let res = await mutate({
+        mutation: POST_SIGNUP,
+        variables: {
+          username: "Max"
+        }
+      });
+      expect(res).toMatchObject({
+        data: null,
+        errors: [{ message: "Username already taken! There can be only one!" }]
+      });
     });
   });
 });

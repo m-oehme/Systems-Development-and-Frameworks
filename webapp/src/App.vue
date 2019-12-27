@@ -33,7 +33,6 @@ export default {
   data() {
     return {
       message: "Hello Vue!",
-      isLoggedIn: false,
       user: null
     };
   },

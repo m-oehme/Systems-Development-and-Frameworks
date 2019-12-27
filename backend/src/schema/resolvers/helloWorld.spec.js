@@ -24,7 +24,8 @@ describe("Querys", () => {
     await expect(query({ query: GET_HELLO })).resolves.toMatchObject({
       data: {
         message: hello
-      }
+      },
+      errors: undefined
     });
   });
 });

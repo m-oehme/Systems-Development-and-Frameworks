@@ -25,13 +25,12 @@ module.exports.TodoResolver = {
     },
     addToDo: (object, params, context) => {
       const decoded = decodedToken(context.token);
-      var maxid = 0;
-      todoListData.map(obj => {
-        if (obj.id > maxid) maxid = obj.id;
-      });
+      const maxid = todoListData.reduce((previousValue, currentValue) =>
+        Math.max(previousValue.id, currentValue.id)
+      );
 
       todoListData.push({
-        id: maxid + 1,
+        id: (maxid + 1).toString(),
         text: params.text,
         author: {
           name: params.authorName

@@ -37,9 +37,7 @@ module.exports.LoginResolver = {
           isLoggedIn: true
         };
       } else {
-        throw new AuthenticationError(
-          "Username already taken! There can be only one!"
-        );
+        throw new Error("Username already taken! There can be only one!");
       }
     }
   }
