@@ -1,17 +1,12 @@
-const { NEO4J_USERNAME, NEO4J_PASSWORD } = require("../../utils/config");
-
-const { userData } = require("../../data");
-
-const { gql } = require("apollo-server");
-const { createTestClient } = require("apollo-server-testing");
-const { v1 } = require("neo4j-driver");
-
-const { constructTestServer } = require("../../utils/__utils");
+import { gql } from "apollo-server";
+import { createTestClient } from "apollo-server-testing";
+import { constructTestServer } from "../../utils/__utils";
+import { NEO4J_USERNAME, NEO4J_PASSWORD } from "../../utils/config";
+import { v1 } from "neo4j-driver";
 
 const POST_LOGIN = gql`
   mutation login($username: String) {
     login(username: $username) {
-      isLoggedIn
       token
     }
   }
@@ -21,7 +16,6 @@ const POST_SIGNUP = gql`
   mutation signup($username: String) {
     signup(username: $username) {
       username
-      isLoggedIn
       token
     }
   }
@@ -52,46 +46,55 @@ afterAll(async () => {
 });
 
 describe("Mutations", () => {
-  it("receiving token on login", async () => {
-    let res = await mutate({
-      mutation: POST_LOGIN,
-      variables: {
-        username: userData[0].username
-      }
-    });
-    expect(res.data.login.isLoggedIn).toBeTruthy();
-  });
-
-  it("error wrong username", async () => {
-    let res = await mutate({
-      mutation: POST_LOGIN,
-      variables: {
-        username: "Not A Human connected!"
-      }
-    });
-    expect(res).toMatchObject({
-      data: null,
-      errors: [{ message: "There is no such user, you fool!" }]
+  describe("given valid login credentials", () => {
+    it("responds with token", async () => {
+      let res = await mutate({
+        mutation: POST_LOGIN,
+        variables: {
+          username: "Max"
+        }
+      });
+      expect(res.data.login.token).toStrictEqual(expect.any(String));
     });
   });
 
-  it("signup successful", async () => {
-    let res = await mutate({
-      mutation: POST_SIGNUP,
-      variables: {
-        username: "Bob Ross"
-      }
+  describe("given falsy login credentials", () => {
+    it("throws AuthenticationError Login Failed", async () => {
+      await expect(
+        mutate({
+          mutation: POST_LOGIN,
+          variables: {
+            username: "Not A Human connected!"
+          }
+        })
+      ).resolves.toMatchObject({
+        data: null,
+        errors: [{ message: "There is no such user, you fool!" }]
+      });
     });
-    expect(res.data.signup.isLoggedIn).toBeTruthy();
   });
 
-  it("signup existing user", async () => {
-    let res = await mutate({
-      mutation: POST_SIGNUP,
-      variables: {
-        username: userData[0].username
-      }
+  describe("given username that is NOT taken", () => {
+    it("creates a new user in the database and responds with a token", async () => {
+      let res = await mutate({
+        mutation: POST_SIGNUP,
+        variables: {
+          username: "Bob Ross"
+        }
+      });
+      expect(res.data.signup.token).toStrictEqual(expect.any(String));
     });
-    expect(res.data.signup.token).not.toBeNull();
+  });
+
+  describe("user exists in database already", () => {
+    it("returns user and login", async () => {
+      let res = await mutate({
+        mutation: POST_SIGNUP,
+        variables: {
+          username: "Max"
+        }
+      });
+      expect(res.data.signup.token).not.toBeNull();
+    });
   });
 });

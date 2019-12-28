@@ -17,45 +17,41 @@ export default {
     };
   },
   methods: {
-    login: function() {
-      this.$apollo
-        .mutate({
-          mutation: gql`
-            mutation login($username: String) {
-              login(username: $username) {
-                username
-                isLoggedIn
-                token
-              }
-            }
-          `,
-          variables: {
-            username: this.username
+    login: async function() {
+      const mutation = gql`
+        mutation login($username: String) {
+          login(username: $username) {
+            username
+            token
           }
-        })
-        .then(body => {
-          this.$emit("set-user", body.data.login);
-        });
+        }
+      `;
+      const variables = {
+        username: this.username
+      };
+      const result = await this.$apollo.mutate({
+        mutation: mutation,
+        variables: variables
+      });
+      this.$emit("set-user", result.data.login);
     },
-    signup: function() {
-      this.$apollo
-        .mutate({
-          mutation: gql`
-            mutation signup($username: String) {
-              signup(username: $username) {
-                username
-                isLoggedIn
-                token
-              }
-            }
-          `,
-          variables: {
-            username: this.username
+    signup: async function() {
+      const mutation = gql`
+        mutation signup($username: String) {
+          signup(username: $username) {
+            username
+            token
           }
-        })
-        .then(body => {
-          this.$emit("set-user", body.data.signup);
-        });
+        }
+      `;
+      const variables = {
+        username: this.username
+      };
+      const result = await this.$apollo.mutate({
+        mutation: mutation,
+        variables: variables
+      });
+      this.$emit("set-user", result.data.signup);
     }
   }
 };

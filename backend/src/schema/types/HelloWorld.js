@@ -1,6 +1,6 @@
-const { gql } = require("apollo-server");
+import { gql } from "apollo-server";
 
-module.exports.HelloWorldType = gql`
+export const HelloWorldType = gql`
   type Query {
     hello: String
   }

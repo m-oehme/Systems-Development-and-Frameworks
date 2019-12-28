@@ -1,6 +1,6 @@
-const { hello } = require("../../data");
+import { hello } from "../../data";
 
-module.exports.HelloWorldResolver = {
+export const HelloWorldResolver = {
   Query: {
     hello: () => hello
   }

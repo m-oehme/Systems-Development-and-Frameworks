@@ -1,12 +1,10 @@
-const { NEO4J_USERNAME, NEO4J_PASSWORD } = require("../../utils/config");
+import { gql } from "apollo-server";
+import { createTestClient } from "apollo-server-testing";
+import { constructTestServer } from "../../utils/__utils";
+import { NEO4J_USERNAME, NEO4J_PASSWORD } from "../../utils/config";
+import { v1 } from "neo4j-driver";
 
-const { todoListData, userData } = require("../../data");
-
-const { gql } = require("apollo-server");
-const { createTestClient } = require("apollo-server-testing");
-const { v1 } = require("neo4j-driver");
-
-const { constructTestServer } = require("../../utils/__utils");
+import { todoListData } from "../../data";
 
 const GET_TODOS = gql`
   query {
@@ -115,13 +113,15 @@ beforeAll(async () => {
   query = createTestClient(testServer).query;
   mutate = createTestClient(testServer).mutate;
 
-  let res = await mutate({
+  let {
+    data: { login }
+  } = await mutate({
     mutation: POST_LOGIN,
     variables: {
-      username: userData[0].username
+      username: "Max"
     }
   });
-  token = res.data.login.token;
+  token = login.token;
 });
 
 afterAll(async () => {
@@ -136,7 +136,8 @@ describe("Querys", () => {
     expect(res).toMatchObject({
       data: {
         todos: todoListData.filter(todo => todo.author.name === "Max")
-      }
+      },
+      errors: undefined
     });
   });
 
@@ -202,11 +203,12 @@ describe("Mutations", () => {
     ).resolves.toMatchObject({
       data: {
         delToDo: list
-      }
+      },
+      errors: undefined
     });
   });
 
-  it("add todo", async () => {
+  it("add new todo to database", async () => {
     const list = todoListData.filter(todo => todo.author.name === "Max");
     list.push(newtodo);
     await expect(
@@ -220,7 +222,8 @@ describe("Mutations", () => {
     ).resolves.toMatchObject({
       data: {
         addToDo: list
-      }
+      },
+      errors: undefined
     });
   });
 
@@ -237,7 +240,8 @@ describe("Mutations", () => {
     ).resolves.toMatchObject({
       data: {
         updateToDo: todoListData.filter(todo => todo.author.name === "Max")
-      }
+      },
+      errors: undefined
     });
   });
 });

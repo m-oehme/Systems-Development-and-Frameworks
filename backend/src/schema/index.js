@@ -1,4 +1,4 @@
-const { mergeTypes, mergeResolvers } = require("merge-graphql-schemas");
+import { mergeTypes, mergeResolvers } from "merge-graphql-schemas";
 
 /* Here are all the Types!
  * Add to the list.
@@ -8,9 +8,9 @@ const { AuthorType } = require("./types/User");
 const { HelloWorldType } = require("./types/HelloWorld");
 const { LoginType } = require("./types/Login");
 
-const typeDefs = [TodoType, AuthorType, HelloWorldType, LoginType];
+const typeDefsList = [TodoType, AuthorType, HelloWorldType, LoginType];
 
-module.exports.typeDefs = mergeTypes(typeDefs, { all: true });
+export const typeDefs = mergeTypes(typeDefsList, { all: true });
 
 /* Here are all the Resolvers!
  * Add to the list.
@@ -20,4 +20,4 @@ const { HelloWorldResolver } = require("./resolvers/helloWorld");
 const { LoginResolver } = require("./resolvers/login");
 
 const resolversArray = [TodoResolver, HelloWorldResolver, LoginResolver];
-module.exports.resolvers = mergeResolvers(resolversArray);
+export const resolvers = mergeResolvers(resolversArray);
