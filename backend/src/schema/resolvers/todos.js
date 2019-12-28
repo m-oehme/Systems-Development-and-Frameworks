@@ -1,29 +1,28 @@
 import { decodedToken } from "../../utils/decode";
 import { todoListData } from "../../data";
+import { neo4jgraphql } from "neo4j-graphql-js";
 
 export const TodoResolver = {
-  Todo: {
-    author(todo) {
-      return todoListData.find(value => {
-        return todo.id === value.id;
-      }).author;
-    }
-  },
   Query: {
-    todos: (object, params, context) => {
-      const decoded = decodedToken(context.token);
-      return todoListData.filter(todo => todo.author.name === decoded.username);
+    todos(object, params, ctx, resolveInfo) {
+      const decoded = decodedToken(ctx.token);
+      params.filter = {
+        author: {
+          name: decoded
+        }
+      };
+      return neo4jgraphql(object, params, ctx, resolveInfo);
     }
   },
   Mutation: {
-    delToDo: (object, params, context) => {
-      const decoded = decodedToken(context.token);
+    delToDo: async (object, params, ctx) => {
+      const decoded = decodedToken(ctx.token);
       let index = todoListData.findIndex(todoData => todoData.id === params.id);
       todoListData.splice(index, 1);
-      return todoListData.filter(todo => todo.author.name === decoded.username);
+      return todoListData.filter(todo => todo.author.name === decoded);
     },
-    addToDo: (object, params, context) => {
-      const decoded = decodedToken(context.token);
+    addToDo: (object, params, ctx) => {
+      const decoded = decodedToken(ctx.token);
       const maxid = todoListData.reduce((previousValue, currentValue) =>
         Math.max(previousValue.id, currentValue.id)
       );
@@ -35,14 +34,15 @@ export const TodoResolver = {
           name: params.authorName
         }
       });
-      return todoListData.filter(todo => todo.author.name === decoded.username);
+      return todoListData.filter(todo => todo.author.name === decoded);
     },
-    updateToDo: (object, params, context) => {
-      const decoded = decodedToken(context.token);
+    updateToDo: (object, params, ctx) => {
+      const decoded = decodedToken(ctx.token);
+
       let index = todoListData.findIndex(todoData => todoData.id === params.id);
       todoListData[index].text = params.text;
       todoListData[index].author.name = params.authorName;
-      return todoListData.filter(todo => todo.author.name === decoded.username);
+      return todoListData.filter(todo => todo.author.name === decoded);
     }
   }
 };

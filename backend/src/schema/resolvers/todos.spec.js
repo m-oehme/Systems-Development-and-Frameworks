@@ -1,12 +1,38 @@
 import { gql } from "apollo-server";
 import { createTestClient } from "apollo-server-testing";
 import { constructTestServer } from "../../utils/__utils";
+import { NEO4J_USERNAME, NEO4J_PASSWORD } from "../../utils/config";
+import { v1 } from "neo4j-driver";
 
 import { todoListData } from "../../data";
 
 const GET_TODOS = gql`
   query {
     todos {
+      id
+      text
+      author {
+        name
+      }
+    }
+  }
+`;
+
+const GET_TODOS_PAGED = gql`
+  query {
+    todos(first: 1, offset: 1) {
+      id
+      text
+      author {
+        name
+      }
+    }
+  }
+`;
+
+const GET_TODOS_ORDERED = gql`
+  query {
+    todos(orderBy: text_asc) {
       id
       text
       author {
@@ -62,16 +88,23 @@ const POST_LOGIN = gql`
   }
 `;
 
+let driver;
 let query;
 let mutate;
 let token;
 
 beforeAll(async () => {
+  driver = v1.driver(
+    "bolt://localhost:7687",
+    v1.auth.basic(NEO4J_USERNAME, NEO4J_PASSWORD)
+  );
+
   const { testServer } = constructTestServer();
   testServer.requestOptions = {
     context() {
       return {
-        token: token
+        token: token,
+        driver
       };
     }
   };
@@ -91,6 +124,10 @@ beforeAll(async () => {
   token = login.token;
 });
 
+afterAll(async () => {
+  await driver.close();
+});
+
 describe("Querys", () => {
   it("receiving todolist response", async () => {
     let res = await query({
@@ -101,6 +138,40 @@ describe("Querys", () => {
         todos: todoListData.filter(todo => todo.author.name === "Max")
       },
       errors: undefined
+    });
+  });
+
+  it("receiving orderes todolist response", async () => {
+    let res = await query({
+      query: GET_TODOS_ORDERED
+    });
+    expect(res).toMatchObject({
+      data: {
+        todos: todoListData
+          .filter(todo => todo.author.name === "Max")
+          .sort((a, b) => {
+            if (a.text < b.text) {
+              return -1;
+            }
+            if (a.text > b.text) {
+              return 1;
+            }
+            return 0;
+          })
+      }
+    });
+  });
+
+  it("receiving todos between 1 and 2", async () => {
+    let res = await query({
+      query: GET_TODOS_PAGED
+    });
+    expect(res).toMatchObject({
+      data: {
+        todos: todoListData
+          .filter(todo => todo.author.name === "Max")
+          .slice(1, 2)
+      }
     });
   });
 });
@@ -128,7 +199,7 @@ describe("Mutations", () => {
     const list = todoListData.filter(todo => todo.author.name === "Max");
     list.splice(0, 1);
     await expect(
-      mutate({ mutation: DEL_TODO, variables: { id: 1, token: token } })
+      mutate({ mutation: DEL_TODO, variables: { id: 1 } })
     ).resolves.toMatchObject({
       data: {
         delToDo: list

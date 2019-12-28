@@ -1,42 +1,60 @@
 const { AuthenticationError } = require("apollo-server-errors");
-const jwt = require("jsonwebtoken");
-
-import { userData } from "../../data";
+import jwt from "jsonwebtoken";
 
 export const LoginResolver = {
   Mutation: {
-    login: (object, params) => {
-      let user = userData.find(user => user.username === params.username);
+    login: async (object, params, ctx) => {
+      const session = ctx.driver.session();
+      try {
+        const result = await session.run(
+          "MATCH (max:User) WHERE max.name = $username return max as user",
+          {
+            username: params.username
+          }
+        );
+        const [user] = await result.records.map(record => {
+          return record.get("user").properties;
+        });
 
-      if (user !== undefined) {
-        let token = jwt.sign(user, "supersecret");
-        return {
-          token: token,
-          username: user.username,
-          isLoggedIn: true
-        };
-      } else {
-        throw new AuthenticationError("There is no such user, you fool!");
+        if (user !== undefined) {
+          let token = jwt.sign(user.name, "supersecret");
+          return {
+            token: token,
+            username: user.name,
+            isLoggedIn: true
+          };
+        } else {
+          throw new AuthenticationError("There is no such user, you fool!");
+        }
+      } finally {
+        await session.close();
       }
     },
-    signup: (object, params) => {
-      let user = userData.find(user => user.username === params.username);
+    signup: async (object, params, ctx) => {
+      const session = ctx.driver.session();
+      try {
+        const result = await session.run(
+          "MERGE (max:User {name:$username}) return max as user",
+          {
+            username: params.username
+          }
+        );
+        const [user] = await result.records.map(record => {
+          return record.get("user").properties;
+        });
 
-      if (user === undefined) {
-        let newUser = {
-          username: params.username
-        };
-        userData.push(newUser);
-
-        let token = jwt.sign(newUser, "supersecret");
-
-        return {
-          token: token,
-          username: newUser.username,
-          isLoggedIn: true
-        };
-      } else {
-        throw new Error("Username already taken! There can be only one!");
+        if (user !== undefined) {
+          let token = jwt.sign(user.name, "supersecret");
+          return {
+            token: token,
+            username: user.name,
+            isLoggedIn: true
+          };
+        } else {
+          throw new Error("Username already taken! There can be only one!");
+        }
+      } finally {
+        await session.close();
       }
     }
   }

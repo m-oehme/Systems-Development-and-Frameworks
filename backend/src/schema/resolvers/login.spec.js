@@ -1,11 +1,12 @@
 import { gql } from "apollo-server";
 import { createTestClient } from "apollo-server-testing";
 import { constructTestServer } from "../../utils/__utils";
+import { NEO4J_USERNAME, NEO4J_PASSWORD } from "../../utils/config";
+import { v1 } from "neo4j-driver";
 
 const POST_LOGIN = gql`
   mutation login($username: String) {
     login(username: $username) {
-      isLoggedIn
       token
     }
   }
@@ -15,17 +16,33 @@ const POST_SIGNUP = gql`
   mutation signup($username: String) {
     signup(username: $username) {
       username
-      isLoggedIn
       token
     }
   }
 `;
 
+let driver;
 let mutate;
 
 beforeAll(() => {
+  driver = v1.driver(
+    "bolt://localhost:7687",
+    v1.auth.basic(NEO4J_USERNAME, NEO4J_PASSWORD)
+  );
+
   const { testServer } = constructTestServer();
+  testServer.requestOptions = {
+    context() {
+      return {
+        driver
+      };
+    }
+  };
   mutate = createTestClient(testServer).mutate;
+});
+
+afterAll(async () => {
+  await driver.close();
 });
 
 describe("Mutations", () => {
@@ -70,17 +87,14 @@ describe("Mutations", () => {
   });
 
   describe("user exists in database already", () => {
-    it("throw AuthenticationError SignUp failed", async () => {
+    it("returns user and login", async () => {
       let res = await mutate({
         mutation: POST_SIGNUP,
         variables: {
           username: "Max"
         }
       });
-      expect(res).toMatchObject({
-        data: null,
-        errors: [{ message: "Username already taken! There can be only one!" }]
-      });
+      expect(res.data.signup.token).not.toBeNull();
     });
   });
 });

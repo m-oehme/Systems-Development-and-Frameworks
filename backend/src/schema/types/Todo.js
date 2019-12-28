@@ -4,7 +4,7 @@ export const TodoType = gql`
   type Todo {
     id: ID
     text: String
-    author: Author
+    author: User @relation(name: "ASSIGNED", direction: "IN")
   }
 
   type Query {

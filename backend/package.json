@@ -8,7 +8,8 @@
     "build": "babel src/ -d dist/ --copy-files",
     "start": "node dist/",
     "lint": "eslint src --config .eslintrc.js",
-    "test": "jest --verbose -u"
+    "test": "jest --verbose -u --detectOpenHandles",
+    "seed": "babel-node src/seed.js"
   },
   "keywords": [],
   "author": "",
@@ -18,7 +19,9 @@
     "core-js": "^3.3.2",
     "graphql": "^14.5.8",
     "jsonwebtoken": "^8.5.1",
-    "merge-graphql-schemas": "^1.7.3"
+    "merge-graphql-schemas": "^1.7.3",
+    "neo4j-graphql-js": "^2.9.3",
+    "neo4j-driver": "^1.7.6"
   },
   "devDependencies": {
     "apollo-server-testing": "~2.9.7",
