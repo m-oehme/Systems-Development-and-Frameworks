@@ -1,4 +1,4 @@
-const { rule, shield } = require("graphql-shield");
+import { rule, shield } from "graphql-shield";
 
 // Roles
 const isAuthenticated = rule({ cache: "contextual" })(
@@ -8,7 +8,7 @@ const isAuthenticated = rule({ cache: "contextual" })(
 );
 
 // Permission
-const permissions = shield({
+export const permissions = shield({
   Query: {
     todos: isAuthenticated
   },
@@ -18,5 +18,3 @@ const permissions = shield({
     updateToDo: isAuthenticated
   }
 });
-
-module.exports.permissions = permissions;

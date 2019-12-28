@@ -1,5 +1,6 @@
-const { NEO4J_USERNAME, NEO4J_PASSWORD } = require("./utils/config");
-const { v1 } = require("neo4j-driver");
+import { v1 } from "neo4j-driver";
+import { NEO4J_USERNAME, NEO4J_PASSWORD } from "./utils/config";
+
 const driver = v1.driver(
   "bolt://localhost:7687",
   v1.auth.basic(NEO4J_USERNAME, NEO4J_PASSWORD)

@@ -1,8 +1,7 @@
 const { AuthenticationError } = require("apollo-server-errors");
+import jwt from "jsonwebtoken";
 
-const jwt = require("jsonwebtoken");
-
-module.exports.LoginResolver = {
+export const LoginResolver = {
   Mutation: {
     login: async (object, params, ctx) => {
       const session = ctx.driver.session();
@@ -52,9 +51,7 @@ module.exports.LoginResolver = {
             isLoggedIn: true
           };
         } else {
-          throw new AuthenticationError(
-            "Username already taken! There can be only one!"
-          );
+          throw new Error("Username already taken! There can be only one!");
         }
       } finally {
         await session.close();

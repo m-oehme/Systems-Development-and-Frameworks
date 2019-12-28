@@ -1,8 +1,7 @@
-const { todoListData } = require("../../data");
+import { todoListData } from "../../data";
+import { neo4jgraphql } from "neo4j-graphql-js";
 
-const { neo4jgraphql } = require("neo4j-graphql-js");
-
-module.exports.TodoResolver = {
+export const TodoResolver = {
   Query: {
     todos(object, params, ctx, resolveInfo) {
       params.filter = {
@@ -20,13 +19,12 @@ module.exports.TodoResolver = {
       return todoListData.filter(todo => todo.author.name === ctx.user);
     },
     addToDo: (object, params, ctx) => {
-      var maxid = 0;
-      todoListData.map(obj => {
-        if (obj.id > maxid) maxid = obj.id;
-      });
+      const maxid = todoListData.reduce((previousValue, currentValue) =>
+        Math.max(previousValue.id, currentValue.id)
+      );
 
       todoListData.push({
-        id: maxid + 1,
+        id: (maxid + 1).toString(),
         text: params.text,
         author: {
           name: params.authorName

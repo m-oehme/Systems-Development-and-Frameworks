@@ -9,12 +9,7 @@
         <div style="font-style: italic">
           Current editor is {{ user.username }}
         </div>
-        <!--        <button class="smallGray" @click="editAuthor">Edit</button>-->
       </div>
-      <!--      <div v-else class="head_right">-->
-      <!--        <button class="bigGreen" @click="saveAuthor">Save Author</button>-->
-      <!--        <input v-model="author.name" />-->
-      <!--      </div>-->
     </div>
     <ol>
       <TodoItem
@@ -73,79 +68,73 @@ export default {
       };
       this.todoListData.push(newTodo);
     },
-    deleteEntry: function(todo) {
-      this.$apollo
-        .mutate({
-          mutation: gql`
-            mutation delToDo($id: ID) {
-              delToDo(id: $id) {
-                id
-                text
-                author {
-                  name
-                }
-              }
+    deleteEntry: async function(todo) {
+      const mutation = gql`
+        mutation delToDo($id: ID) {
+          delToDo(id: $id) {
+            id
+            text
+            author {
+              name
             }
-          `,
-          variables: {
-            id: todo.id
           }
-        })
-        .then(body => {
-          this.todoListData = body.data.delToDo.slice();
-        });
+        }
+      `;
+      const variables = {
+        id: todo.id
+      };
+      const result = await this.$apollo.mutate({
+        mutation: mutation,
+        variables: variables
+      });
+      this.todoListData = result.data.delToDo.slice();
     },
-    saveEntry: function(todo) {
+    saveEntry: async function(todo) {
       if (todo.id == null) {
         this.initialEditMode = false;
-        this.$apollo
-          .mutate({
-            mutation: gql`
-              mutation addToDo($text: String!, $authorName: String!) {
-                addToDo(text: $text, authorName: $authorName) {
-                  id
-                  text
-                  author {
-                    name
-                  }
-                }
+
+        const mutation = gql`
+          mutation addToDo($text: String!, $authorName: String!) {
+            addToDo(text: $text, authorName: $authorName) {
+              id
+              text
+              author {
+                name
               }
-            `,
-            variables: {
-              text: todo.text,
-              authorName: this.user.username
             }
-          })
-          .then(body => {
-            this.todoListData = body.data.addToDo.slice();
-          });
+          }
+        `;
+        const variables = {
+          text: todo.text,
+          authorName: this.user.username
+        };
+        const result = await this.$apollo.mutate({
+          mutation: mutation,
+          variables: variables
+        });
+        this.todoListData = result.data.addToDo.slice();
       } else {
-        this.$apollo
-          .mutate({
-            mutation: gql`
-              mutation updateToDo(
-                $id: ID!
-                $text: String!
-                $authorName: String!
-              ) {
-                updateToDo(id: $id, text: $text, authorName: $authorName) {
-                  id
-                  text
-                  author {
-                    name
-                  }
-                }
+        const mutation = gql`
+          mutation updateToDo($id: ID!, $text: String!, $authorName: String!) {
+            updateToDo(id: $id, text: $text, authorName: $authorName) {
+              id
+              text
+              author {
+                name
               }
-            `,
-            variables: {
-              id: todo.id,
-              text: todo.text,
-              authorName: this.user.username
             }
-          })
-          .then(body => {
-            this.todoListData = body.data.updateToDo.slice();
-          });
+          }
+        `;
+        const variables = {
+          id: todo.id,
+          text: todo.text,
+          authorName: this.user.username
+        };
+        const result = await this.$apollo.mutate({
+          mutation: mutation,
+          variables: variables
+        });
+        this.todoListData = result.data.updateToDo.slice();
       }
     },
     editAuthor() {

@@ -1,13 +1,10 @@
-const { NEO4J_USERNAME, NEO4J_PASSWORD } = require("../../utils/config");
-
-const { todoListData, userData } = require("../../data");
-
-const { gql } = require("apollo-server");
-const { createTestClient } = require("apollo-server-testing");
-const { v1 } = require("neo4j-driver");
-const { decodedToken } = require("../../utils/decode");
-
-const { constructTestServer } = require("../../utils/__utils");
+import { gql } from "apollo-server";
+import { createTestClient } from "apollo-server-testing";
+import { constructTestServer } from "../../utils/__utils";
+import { NEO4J_USERNAME, NEO4J_PASSWORD } from "../../utils/config";
+import { v1 } from "neo4j-driver";
+import { decodedToken } from "../../utils/decode";
+import { todoListData } from "../../data";
 
 const GET_TODOS = gql`
   query {
@@ -146,7 +143,7 @@ describe("Authentication Successful", () => {
     let res = await mutate({
       mutation: POST_LOGIN,
       variables: {
-        username: userData[0].username
+        username: "Max"
       }
     });
     token = res.data.login.token;
@@ -226,11 +223,12 @@ describe("Authentication Successful", () => {
       ).resolves.toMatchObject({
         data: {
           delToDo: list
-        }
+        },
+        errors: undefined
       });
     });
 
-    it("add todo", async () => {
+    it("add new todo to database", async () => {
       const list = todoListData.filter(todo => todo.author.name === "Max");
       list.push(newtodo);
       await expect(
@@ -244,7 +242,8 @@ describe("Authentication Successful", () => {
       ).resolves.toMatchObject({
         data: {
           addToDo: list
-        }
+        },
+        errors: undefined
       });
     });
 
@@ -261,7 +260,8 @@ describe("Authentication Successful", () => {
       ).resolves.toMatchObject({
         data: {
           updateToDo: todoListData.filter(todo => todo.author.name === "Max")
-        }
+        },
+        errors: undefined
       });
     });
   });

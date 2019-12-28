@@ -1,6 +1,6 @@
-const { gql } = require("apollo-server");
+import { gql } from "apollo-server";
 
-module.exports.LoginType = gql`
+export const LoginType = gql`
   type Login {
     username: String
     token: String

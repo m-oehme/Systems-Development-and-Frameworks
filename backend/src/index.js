@@ -1,11 +1,11 @@
-const { NEO4J_USERNAME, NEO4J_PASSWORD } = require("./utils/config");
-const { ApolloServer } = require("apollo-server");
-const { typeDefs, resolvers } = require("./schema");
-const { permissions } = require("./rules");
-const { makeAugmentedSchema } = require("neo4j-graphql-js");
-const { v1 } = require("neo4j-driver");
-const { decodedToken } = require("./utils/decode");
-const { applyMiddleware } = require("graphql-middleware");
+import { ApolloServer } from "apollo-server";
+import { typeDefs, resolvers } from "./schema";
+import { NEO4J_USERNAME, NEO4J_PASSWORD } from "./utils/config";
+import { makeAugmentedSchema } from "neo4j-graphql-js";
+import { v1 } from "neo4j-driver";
+import { applyMiddleware } from "graphql-middleware";
+import { decodedToken } from "./utils/decode";
+import { permissions } from "./rules";
 
 const driver = v1.driver(
   "bolt://localhost:7687",
