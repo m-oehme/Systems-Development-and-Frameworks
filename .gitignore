@@ -101,7 +101,9 @@ typings/
 .dynamodb/
 
 .idea/
-
+dist/
 package-lock.json
 
 dist/
+
+__snapshots__
