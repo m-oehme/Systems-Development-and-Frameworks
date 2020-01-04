@@ -10,7 +10,8 @@ const isAuthenticated = rule({ cache: "contextual" })(
 // Permission
 export const permissions = shield({
   Query: {
-    todos: isAuthenticated
+    todos: isAuthenticated,
+    News: isAuthenticated
   },
   Mutation: {
     delToDo: isAuthenticated,

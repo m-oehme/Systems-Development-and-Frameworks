@@ -22,6 +22,10 @@ const driver = v1.driver(
             (max)-[:ASSIGNED]->(todo1),
             (max)-[:ASSIGNED]->(todo3),
             (vic)-[:ASSIGNED]->(todo2)
+            
+            CREATE(:News {headline: 'Researcher found out that Water contains significant amounts of the chemical compound H2O!', author: 'Vici B', createdAt: '2020/01/12'})
+            CREATE(:News {headline: 'Lost traveler finally found the exit of Shinjuku Station after 20 years.', author: 'Max O', createdAt: '2019/01/12'})
+            CREATE(:News {headline: 'Is Web Development the future? Do you want to know more?', author: 'Max O', createdAt: '2021/01/12'})
             `
     );
 
