@@ -1,12 +1,38 @@
 import { gql } from "apollo-server";
 import { createTestClient } from "apollo-server-testing";
 import { constructTestServer } from "../../utils/__utils";
-
+import { NEO4J_USERNAME, NEO4J_PASSWORD } from "../../utils/config";
+import { v1 } from "neo4j-driver";
+import { decodedToken } from "../../utils/decode";
 import { todoListData } from "../../data";
 
 const GET_TODOS = gql`
   query {
     todos {
+      id
+      text
+      author {
+        name
+      }
+    }
+  }
+`;
+
+const GET_TODOS_PAGED = gql`
+  query {
+    todos(first: 1, offset: 1) {
+      id
+      text
+      author {
+        name
+      }
+    }
+  }
+`;
+
+const GET_TODOS_ORDERED = gql`
+  query {
+    todos(orderBy: text_asc) {
       id
       text
       author {
@@ -62,16 +88,23 @@ const POST_LOGIN = gql`
   }
 `;
 
+let driver;
 let query;
 let mutate;
 let token;
 
 beforeAll(async () => {
+  driver = v1.driver(
+    "bolt://localhost:7687",
+    v1.auth.basic(NEO4J_USERNAME, NEO4J_PASSWORD)
+  );
+
   const { testServer } = constructTestServer();
   testServer.requestOptions = {
     context() {
       return {
-        token: token
+        user: decodedToken(token),
+        driver
       };
     }
   };
@@ -79,98 +112,157 @@ beforeAll(async () => {
   // use the test server to create a query function
   query = createTestClient(testServer).query;
   mutate = createTestClient(testServer).mutate;
-
-  let {
-    data: { login }
-  } = await mutate({
-    mutation: POST_LOGIN,
-    variables: {
-      username: "Max"
-    }
-  });
-  token = login.token;
 });
+afterAll(async () => {
+  await driver.close();
+});
+describe("Authentication Failed", () => {
+  beforeAll(async () => {
+    token = "";
+  });
 
-describe("Querys", () => {
-  it("receiving todolist response", async () => {
-    let res = await query({
-      query: GET_TODOS
+  describe("Querys", () => {
+    it("requestin todolist with false username", async () => {
+      let res = await query({
+        query: GET_TODOS
+      });
+      expect(res.errors[0]).toHaveProperty("message", "Not Authorised!");
     });
-    expect(res).toMatchObject({
-      data: {
-        todos: todoListData.filter(todo => todo.author.name === "Max")
-      },
-      errors: undefined
+  });
+
+  describe("Mutation", () => {
+    it("requesting delete todo with false username", async () => {
+      let res = await mutate({ mutation: DEL_TODO, variables: { id: 1 } });
+
+      expect(res.errors[0]).toHaveProperty("message", "Not Authorised!");
     });
   });
 });
-
-describe("Mutations", () => {
-  let newtodo, updatedTodo;
-  beforeEach(() => {
-    newtodo = {
-      text: "Me was added.",
-      author: {
-        name: "Max"
+describe("Authentication Successful", () => {
+  beforeAll(async () => {
+    let res = await mutate({
+      mutation: POST_LOGIN,
+      variables: {
+        username: "Max"
       }
-    };
-
-    updatedTodo = {
-      id: "3",
-      text: "Hello Update.",
-      author: {
-        name: "Max"
-      }
-    };
+    });
+    token = res.data.login.token;
   });
 
-  it("delete todo", async () => {
-    const list = todoListData.filter(todo => todo.author.name === "Max");
-    list.splice(0, 1);
-    await expect(
-      mutate({ mutation: DEL_TODO, variables: { id: 1, token: token } })
-    ).resolves.toMatchObject({
-      data: {
-        delToDo: list
-      },
-      errors: undefined
+  describe("Querys", () => {
+    it("receiving todolist response", async () => {
+      let res = await query({
+        query: GET_TODOS
+      });
+      expect(res).toMatchObject({
+        data: {
+          todos: todoListData.filter(todo => todo.author.name === "Max")
+        }
+      });
+    });
+
+    it("receiving orderes todolist response", async () => {
+      let res = await query({
+        query: GET_TODOS_ORDERED
+      });
+      expect(res).toMatchObject({
+        data: {
+          todos: todoListData
+            .filter(todo => todo.author.name === "Max")
+            .sort((a, b) => {
+              if (a.text < b.text) {
+                return -1;
+              }
+              if (a.text > b.text) {
+                return 1;
+              }
+              return 0;
+            })
+        }
+      });
+    });
+
+    it("receiving todos between 1 and 2", async () => {
+      let res = await query({
+        query: GET_TODOS_PAGED
+      });
+      expect(res).toMatchObject({
+        data: {
+          todos: todoListData
+            .filter(todo => todo.author.name === "Max")
+            .slice(1, 2)
+        }
+      });
     });
   });
 
-  it("add new todo to database", async () => {
-    const list = todoListData.filter(todo => todo.author.name === "Max");
-    list.push(newtodo);
-    await expect(
-      mutate({
-        mutation: ADD_TODO,
-        variables: {
-          text: newtodo.text,
-          authorName: newtodo.author.name
+  describe("Mutations", () => {
+    let newtodo, updatedTodo;
+    beforeEach(() => {
+      newtodo = {
+        text: "Me was added.",
+        author: {
+          name: "Max"
         }
-      })
-    ).resolves.toMatchObject({
-      data: {
-        addToDo: list
-      },
-      errors: undefined
-    });
-  });
+      };
 
-  it("update todo", async () => {
-    await expect(
-      mutate({
-        mutation: UPDATE_TODO,
-        variables: {
-          id: updatedTodo.id,
-          text: updatedTodo.text,
-          authorName: updatedTodo.author.name
+      updatedTodo = {
+        id: "3",
+        text: "Hello Update.",
+        author: {
+          name: "Max"
         }
-      })
-    ).resolves.toMatchObject({
-      data: {
-        updateToDo: todoListData.filter(todo => todo.author.name === "Max")
-      },
-      errors: undefined
+      };
+    });
+
+    it("delete todo", async () => {
+      const list = todoListData.filter(todo => todo.author.name === "Max");
+      list.splice(0, 1);
+      await expect(
+        mutate({ mutation: DEL_TODO, variables: { id: 1 } })
+      ).resolves.toMatchObject({
+        data: {
+          delToDo: list
+        },
+        errors: undefined
+      });
+    });
+
+    it("add new todo to database", async () => {
+      const list = todoListData.filter(todo => todo.author.name === "Max");
+      list.push(newtodo);
+      await expect(
+        mutate({
+          mutation: ADD_TODO,
+          variables: {
+            text: newtodo.text,
+            authorName: newtodo.author.name
+          }
+        })
+      ).resolves.toMatchObject({
+        data: {
+          addToDo: list
+        },
+        errors: undefined
+      });
+    });
+
+    it("update todo", async () => {
+      await expect(
+        mutate({
+          mutation: UPDATE_TODO,
+          variables: {
+            id: updatedTodo.id,
+            text: updatedTodo.text,
+            authorName: updatedTodo.author.name
+          }
+        })
+      ).resolves.toMatchObject({
+        data: {
+          updateToDo: todoListData.filter(todo => todo.author.name === "Max")
+        },
+        errors: undefined
+      });
     });
   });
 });

@@ -5,6 +5,7 @@
     </div>
     <div v-if="user != null">
       <TodoList :user="this.user" />
+      <NewsFeed :user="this.user" />
     </div>
     <div v-else>
       <Login @set-user="setUser" />
@@ -16,10 +17,12 @@
 import gql from "graphql-tag";
 import TodoList from "./components/TodoList";
 import Login from "./components/Login";
+import NewsFeed from "./components/NewsFeed";
 
 export default {
   name: "App",
   components: {
+    NewsFeed,
     Login,
     TodoList
   },
