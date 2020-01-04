@@ -36,7 +36,7 @@ afterAll(async () => {
 
 const GET_NEWS = gql`
   query {
-    News {
+    News(orderBy: createdAt_asc) {
       headline
       author
       createdAt
@@ -56,9 +56,10 @@ const POST_LOGIN = gql`
 
 const mockNewsData = [
   {
-    headline: "Is Web Development the future? Do you want to know more?",
+    headline:
+      "Lost traveler finally found the exit of Shinjuku Station after 20 years.",
     author: "Max O",
-    createdAt: "2021/01/12"
+    createdAt: "2019/01/12"
   },
   {
     headline:
@@ -67,10 +68,9 @@ const mockNewsData = [
     createdAt: "2020/01/12"
   },
   {
-    headline:
-      "Lost traveler finally found the exit of Shinjuku Station after 20 years.",
+    headline: "Is Web Development the future? Do you want to know more?",
     author: "Max O",
-    createdAt: "2019/01/12"
+    createdAt: "2021/01/12"
   }
 ];
 
